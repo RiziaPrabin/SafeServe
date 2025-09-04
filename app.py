@@ -374,6 +374,66 @@ def add_inspection():
 
 # --- END: New inspection routes ---
 
+# --- START: New routes for Hotel Owner Inspection View ---
+
+# This is the API endpoint that calculates the summary for the dashboard card.
+@app.route('/api/inspections_summary')
+def inspections_summary():
+    hotel_id = request.args.get('hotel_id')
+    if not hotel_id:
+        return jsonify({"error": "Hotel ID is required"}), 400
+
+    try:
+        cursor = db.cursor()
+        
+        # Query to count passed inspections
+        query_passed = "SELECT COUNT(*) FROM inspections WHERE hotel_id = %s AND overall_result = 'Passed'"
+        cursor.execute(query_passed, (hotel_id,))
+        passed_count = cursor.fetchone()[0]
+
+        # Query to count failed or needs improvement inspections
+        query_failed = "SELECT COUNT(*) FROM inspections WHERE hotel_id = %s AND overall_result IN ('Failed', 'Needs Improvement')"
+        cursor.execute(query_failed, (hotel_id,))
+        failed_count = cursor.fetchone()[0]
+        
+        cursor.close()
+
+        summary = {
+            "passed": passed_count,
+            "failed": failed_count
+        }
+        return jsonify(summary)
+
+    except Exception as e:
+        print(f"Database error in inspections_summary: {str(e)}")
+        return jsonify({"error": "Database error"}), 500
+
+# This route renders the page where the hotel owner can see their full inspection history.
+@app.route('/inspections_page')
+def inspections_page():
+    return render_template('inspections.html')
+
+# This is the API endpoint that gets the detailed list of inspections for the history page.
+@app.route('/api/hotel_inspections')
+def get_hotel_inspections():
+    hotel_id = request.args.get('hotel_id')
+    if not hotel_id:
+        return jsonify({"error": "Hotel ID is required"}), 400
+
+    try:
+        cursor = db.cursor(dictionary=True)
+        query = "SELECT * FROM inspections WHERE hotel_id = %s ORDER BY inspection_date DESC"
+        cursor.execute(query, (hotel_id,))
+        inspections = cursor.fetchall()
+        cursor.close()
+        return jsonify(inspections)
+
+    except Exception as e:
+        print(f"Database error in get_hotel_inspections: {str(e)}")
+        return jsonify({"error": "Database error"}), 500
+
+# --- END: New routes ---
+
 
 
 # --- This should be at the very end of the file ---
