@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Feedback</title>
+    <!-- Reusing your dashboard styles for a consistent look and feel -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Icon" class="title-icon">
+            <h2>Customer Feedback</h2>
+        </div>
+        <!-- This link takes the owner back to their main dashboard -->
+        <p class="moto-text"><a href="/hotel_dashboard" style="color: inherit; text-decoration: none;">&larr; Back to
+                Dashboard</a></p>
+    </header>
+
+    <!-- The main container where feedback cards will be displayed -->
+    <div class="dashboard" id="feedback-container" style="display: block; grid-template-columns: 1fr;">
+        <p style="text-align: center;">Loading feedback...</p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Step 1: Retrieve the hotel_id that was saved to the browser during login
+            const hotelId = sessionStorage.getItem('hotel_id');
+
+            // Step 2: Check if we have a valid hotelId. If not, show an error.
+            if (!hotelId) {
+                document.getElementById('feedback-container').innerHTML = '<p style="text-align: center;">Could not find your Hotel ID. Please log in again.</p>';
+                return;
+            }
+
+            // Step 3: Fetch feedback from the new API route, specifically for this hotel
+            // The URL looks like: /api/hotel_feedback?hotel_id=123
+            fetch(`/api/hotel_feedback?hotel_id=${hotelId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const feedbackContainer = document.getElementById("feedback-container");
+                    feedbackContainer.innerHTML = ''; // Clear the "Loading..." message
+
+                    // If no feedback is found, display a friendly message
+                    if (data.length === 0) {
+                        feedbackContainer.innerHTML = '<p style="text-align: center;">No feedback has been submitted for your hotel yet.</p>';
+                        return;
+                    }
+
+                    // Step 4: Loop through each piece of feedback and create a card for it
+                    data.forEach(feedback => {
+                        const feedbackCard = document.createElement("div");
+                        feedbackCard.classList.add("card");
+                        feedbackCard.innerHTML = `
+                            <div class="card-header">
+                                <h3>From: ${feedback.customer_name}</h3>
+                            </div>
+                          <p><strong>Date:</strong> ${new Date(feedback.feedback_date).toLocaleDateString()}</p>
+                            <p class="card-description" style="margin-top: 10px;">${feedback.feedback_content}</p>
+                            <hr style="margin: 15px 0;">
+                            <p><strong>Status:</strong> ${feedback.status}</p>
+                            <p><strong>Action Taken:</strong> ${feedback.action_taken}</p>
+                        `;
+                        feedbackContainer.appendChild(feedbackCard);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching feedback:', error);
+                    document.getElementById('feedback-container').innerHTML = '<p style="text-align: center;">Error loading feedback. Please try again later.</p>';
+                });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspector Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashbo.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Icon" class="title-icon">
+            <h2>SafeServe</h2>
+        </div>
+        <p class="moto-text">Your trusted partner for Safe and Quality Dining Experiences</p>
+        <div class="profile-container">
+            <i class="fas fa-user profile-icon"></i>
+            <div class="dropdown-menu">
+                <ul>
+                    <li><a href="/inspector_profile">Inspector Profile</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Icon"
+                    class="sidebar-icon">
+                <h2>Inspector Dashboard</h2>
+            </div>
+            <ul>
+                <li><button class="nav-btn" onclick="navigate('Inspection History')">Inspection History</button></li>
+                <li><button class="nav-btn" onclick="navigate('Pending Inspections')">Pending Inspections</button></li>
+                <!-- ADDED A NEW BUTTON TO VIEW CASES -->
+                <li><button class="nav-btn" id="viewCasesButton">View Food Poisoning Cases</button></li>
+                <li><button class="nav-btn" id="addHotelButton">Add Hotels</button></li>
+                <li><button class="nav-btn" id="logoutButton">Logout</button></li>
+            </ul>
+        </nav>
+
+        <main class="content">
+            <div id="main-content">
+                <h1>Welcome to the SafeServe Food Inspector Dashboard!</h1>
+                <p>Select an option from the sidebar to get started.</p>
+            </div>
+
+            <div class="inspection-actions">
+                <h3>Inspection Actions</h3>
+                <button class="action-btn" id="startInspectionBtn">Start New Inspection</button>
+                <button class="action-btn" onclick="action('Generate Report')">Generate Report</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Handle the navigation for "Start New Inspection" button
+        document.getElementById('startInspectionBtn').addEventListener('click', function () {
+            window.location.href = '/add_insp';
+        });
+
+        // Handle the navigation for "Add Hotels" button in the sidebar
+        document.getElementById('addHotelButton').addEventListener('click', function () {
+            window.location.href = '/add_hotel';
+        });
+
+        // ADDED: Handle navigation for the new "View Food Poisoning Cases" button
+        document.getElementById('viewCasesButton').addEventListener('click', function () {
+            window.location.href = '/view_food_poisoning_cases';
+        });
+
+        // Handle the navigation for the "Logout" button
+        document.getElementById('logoutButton').addEventListener('click', function () {
+            window.location.href = '/inspector_login_page';
+        });
+
+        function navigate(option) {
+            if (option === 'Inspection History') {
+                window.location.href = '/inspection_history';
+            } else if (option === 'Pending Inspections') {
+                window.location.href = '/pending_inspections';
+            } else {
+                alert('Navigating to: ' + option);
+            }
+        }
+
+        function action(actionName) {
+            if (actionName === 'Generate Report') {
+                window.location.href = '/food_insp_report';
+            } else {
+                alert('Performing action: ' + actionName);
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeServe</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
+</head>
+
+<body>
+    <main class="content">
+
+        <!-- Header Section with Title and Caption -->
+        <header class="header">
+            <div class="title-container">
+                <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Icon" class="title-icon">
+                <h1 class="title">SafeServe</h1>
+            </div>
+            <h3 class="caption">Your Trusted Partner for Safe and Quality Dining Experiences</h3>
+        </header>
+
+        <!-- Navigation Links Section -->
+        <nav class="navigation">
+            <ul>
+
+                <li><a href="/submit_feedback_page">Submit Feedback</a></li>
+                <li><a href="/report_food_poisoning_page">Report Food Poisoning</a></li>
+            </ul>
+        </nav>
+
+        <!-- Cover Photo Section -->
+        <section class="cover-photo">
+            <p class="welcome-caption">Welcome to SafeServe! We're glad to have you here.</p>
+        </section>
+
+        <!-- Available Hotels Section -->
+        <div class="hotel-list">
+            <h2>Available Hotels</h2>
+            <div id="hotel-container">
+                <!-- Hotel list will be dynamically inserted here -->
+            </div>
+        </div>
+
+    </main>
+    <script>
+        // JavaScript to fetch and display hotels from the backend
+        window.onload = function () {
+            fetchHotels();
+        }
+
+        function fetchHotels() {
+            fetch('http://127.0.0.1:5000/hotels', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    displayHotels(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching hotels:', error);
+                });
+        }
+
+        function displayHotels(hotels) {
+            const hotelContainer = document.getElementById("hotel-container");
+            hotelContainer.innerHTML = ''; // Clear the container before adding new data
+
+            hotels.forEach(hotel => {
+                const hotelDiv = document.createElement("div");
+                hotelDiv.classList.add("hotel");
+
+                hotelDiv.innerHTML = `
+                    <h3>${hotel[1]}</h3>
+                    <p><strong>Address:</strong> ${hotel[2]}</p>
+                    <p><strong>Contact:</strong> ${hotel[3]}</p>
+                    <p><strong>Email:</strong> ${hotel[4]}</p>
+                    <p><strong>Rating:</strong> ${hotel[6]}</p>
+                `;
+
+                hotelContainer.appendChild(hotelDiv);
+            });
+        }
+    </script>
+</body>
+
+</html>

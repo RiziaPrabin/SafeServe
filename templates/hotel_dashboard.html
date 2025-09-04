@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Icon" class="title-icon">
+            <h2>SafeServe</h2>
+        </div>
+        <p class="moto-text">Your trusted partner for Safe and Quality Dining Experiences</p>
+        <div class="profile-container">
+            <i class="fas fa-user profile-icon"></i> <!-- Added 'profile-icon' class here -->
+            <div class="dropdown-menu">
+                <ul>
+                    <li><a href="/edit_profile_page">Edit Profile</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard">
+        <a href="/inspections_page" class="card">
+            <div class="card-header">
+                <span class="card-icon">📝</span>
+                <h3>Inspections Summary</h3>
+            </div>
+            <p class="card-description">Loading data...</p>
+        </a>
+
+        <a href="/feedback_page" class="card">
+            <div class="card-header">
+                <span class="card-icon">💬</span>
+                <h3>Customer Feedback</h3>
+            </div>
+            <p class="card-description">Loading data...</p>
+        </a>
+
+        <a href="/food_poisoning_page" class="card">
+            <div class="card-header">
+                <span class="card-icon">⚠️</span>
+                <h3>Food Poisoning Cases</h3>
+            </div>
+            <p class="card-description">Loading data...</p>
+        </a>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Assumes you have API endpoints like /inspections_summary, /feedback_summary, etc.
+
+            // Fetch and display inspections data
+            fetch('/inspections_summary')
+                .then(response => response.json())
+                .then(data => {
+                    const inspectionsCard = document.querySelector('a[href="/inspections_page"] .card-description');
+                    inspectionsCard.innerHTML = `<p>Inspections Passed: ${data.passed}</p><p>Upcoming Inspections: ${data.upcoming}</p>`;
+                }).catch(error => {
+                    console.error('Error fetching inspections:', error);
+                    document.querySelector('a[href="/inspections_page"] .card-description').textContent = 'Error loading data.';
+                });
+
+            // Fetch and display feedback data
+            fetch('/feedback_summary')
+                .then(response => response.json())
+                .then(data => {
+                    const feedbackCard = document.querySelector('a[href="/feedback_page"] .card-description');
+                    feedbackCard.innerHTML = `<p>Positive Feedback: ${data.positive}</p><p>Negative Feedback: ${data.negative}</p>`;
+                }).catch(error => {
+                    console.error('Error fetching feedback:', error);
+                    document.querySelector('a[href="/feedback_page"] .card-description').textContent = 'Error loading data.';
+                });
+
+            // Fetch and display food poisoning data
+            fetch('/food_poisoning_summary')
+                .then(response => response.json())
+                .then(data => {
+                    const foodPoisoningCard = document.querySelector('a[href="/food_poisoning_page"] .card-description');
+                    foodPoisoningCard.innerHTML = `<p>Reported Cases: ${data.reported}</p><p>Resolved Cases: ${data.resolved}</p>`;
+                }).catch(error => {
+                    console.error('Error fetching food poisoning cases:', error);
+                    document.querySelector('a[href="/food_poisoning_page"] .card-description').textContent = 'Error loading data.';
+                });
+        });
+    </script>
+</body>
+
+</html>

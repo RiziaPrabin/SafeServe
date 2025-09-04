@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeServe - Home</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main_signup.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
+</head>
+
+<body>
+
+    <div class="main-container">
+        <div class="content-section">
+            <header class="header">
+                <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Icon" class="header-icon">
+                <h1>SAFESERVE</h1>
+                <p class="motto">Your Trusted Partner for Safe and Quality Dining Experiences</p>
+            </header>
+
+            <section class="hero">
+                <h2>Ensuring Diner Safety, One Inspection at a Time.</h2>
+                <p>A seamless, transparent platform connecting hotels, inspectors, and the public to uphold the highest
+                    standards of food safety.</p>
+            </section>
+        </div>
+
+        <div class="login-section">
+            <div class="login-container">
+                <h2>Login</h2>
+                <form id="loginForm">
+                    <label for="userType">Select User Type</label>
+                    <select id="userType" name="userType">
+                        <option value="customer">Customer</option>
+                        <option value="hotelOwner">Hotel Owner</option>
+                        <option value="inspector">Inspector</option>
+                    </select>
+                    <button type="button" onclick="login()">Login</button>
+                </form>
+                <p id="message"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>

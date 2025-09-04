@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Food Poisoning</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesrfc.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="title-container">
+            <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Icon" class="title-icon">
+            <h1 class="title">SafeServe</h1>
+        </div>
+        <p class="caption">Your Trusted Partner for Safe and Quality Dining Experiences</p>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav class="navigation">
+        <ul>
+            <li><a href="/home">Home</a></li>
+            <li><a href="/submit_feedback_page">Submit Feedback</a></li>
+            <li><a href="/report_food_poisoning_page">Report Food Poisoning</a></li>
+        </ul>
+    </nav>
+
+    <!-- Updated Form to Report Food Poisoning -->
+    <section class="report-section">
+        <h2 class="submit-feedback-heading">Report a Food Poisoning Incident</h2>
+        <div class="feedback-form">
+            <form id="report-form">
+                <div class="form-group">
+                    <label for="hotel-id">Hotel ID</label>
+                    <input type="text" id="hotel-id" name="hotel_id" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="report-date">Date of Incident</label>
+                    <input type="date" id="report-date" name="report_date" required>
+                </div>
+
+                <!-- ADDED THIS FIELD BACK -->
+                <div class="form-group">
+                    <label for="affected-people">Number of People Affected</label>
+                    <input type="number" id="affected-people" name="number_of_people_affected" min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="symptoms">Describe Your Symptoms</label>
+                    <textarea id="symptoms" name="symptoms" rows="4" required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Submit Report</button>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById('report-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Collect the updated form data
+            const formData = {
+                hotel_id: document.getElementById('hotel-id').value,
+                report_date: document.getElementById('report-date').value,
+                // ADDED THIS LINE TO COLLECT THE NEW DATA
+                number_of_people_affected: document.getElementById('affected-people').value,
+                symptoms: document.getElementById('symptoms').value,
+            };
+
+            // Send data to the backend
+            fetch('/food_poisoning_cases', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    document.getElementById('report-form').reset();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+        });
+    </script>
+</body>
+
+</html>

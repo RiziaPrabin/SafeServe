@@ -1,0 +1,468 @@
+/* Base Styles and Variables */
+:root {
+    --primary-color: #e74c3c;
+    /* Red accent for primary actions */
+    --secondary-color: #34495e;
+    /* Dark blue-gray for text and sidebar */
+    --accent-color: #1abc9c;
+    /* Teal accent for hover effects */
+    --background-light: #f8f9fa;
+    /* Very light gray for main background */
+    --background-dark: #34495e;
+    /* Dark for sidebar */
+    --card-background: #ffffff;
+    --text-color-dark: #333;
+    --text-color-light: #ecf0f1;
+    /* Light text for dark backgrounds */
+    --text-color-muted: #95a5a6;
+    /* Muted text */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    /* Using Poppins font */
+    background-color: var(--background-light);
+    /* Light overall background */
+    color: var(--text-color-dark);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+    /* Prevent horizontal scroll */
+}
+
+/* Header Styling (Similar to Hotel Dashboard but simplified) */
+header {
+    background: rgba(255, 255, 255, 0.85);
+    /* Slightly more opaque background */
+    padding: 1.5rem 1.5rem;
+    box-shadow: var(--shadow-md);
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    /* Space between logo/title and profile */
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    /* Subtle separator */
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.title-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+h2 {
+    font-size: 1.75rem;
+    color: var(--secondary-color);
+    /* Dark blue-gray for SafeServe title */
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    margin: 0;
+}
+
+.moto-text {
+    color: var(--text-color-muted);
+    font-size: 0.9rem;
+    font-weight: 400;
+    margin-left: 1rem;
+    /* Space from the title */
+}
+
+/* Profile Icon and Dropdown */
+.profile-container {
+    position: relative;
+    /* Needed for absolute positioning of dropdown */
+    display: flex;
+    align-items: center;
+}
+
+.profile-icon {
+    font-size: 1.75rem;
+    color: var(--text-color-muted);
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.profile-icon:hover {
+    color: var(--secondary-color);
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    box-shadow: var(--shadow-md);
+    border-radius: 8px;
+    z-index: 100;
+    margin-top: 0.5rem;
+    min-width: 180px;
+}
+
+.dropdown-menu ul li {
+    padding: 0.75rem 1rem;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-menu ul li a {
+    text-decoration: none;
+    color: var(--text-color-dark);
+    display: block;
+    font-weight: 500;
+}
+
+.dropdown-menu ul li:hover {
+    background-color: #f1f1f1;
+}
+
+.profile-container:hover .dropdown-menu {
+    display: block;
+}
+
+/* Main Layout: Sidebar + Content */
+.container {
+    display: flex;
+    width: 100%;
+    flex-grow: 1;
+    /* Allows content to take remaining height */
+}
+
+/* Sidebar Styling */
+.sidebar {
+    background: var(--background-dark);
+    /* Dark background for sidebar */
+    color: var(--text-color-light);
+    width: 280px;
+    /* Slightly wider sidebar */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-shadow: 4px 0 8px rgba(0, 0, 0, 0.1);
+    height: calc(100vh - 100px);
+    /* Adjust height to be below header */
+    overflow-y: auto;
+    /* Add scroll if content overflows */
+    position: relative;
+    /* For sidebar header positioning */
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 25px;
+    width: 100%;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    /* Separator for header */
+}
+
+.sidebar-icon {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+}
+
+.sidebar h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-color-light);
+    /* Light color for sidebar title */
+    margin: 0;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+.sidebar ul li {
+    margin: 10px 0;
+}
+
+.nav-btn {
+    background: transparent;
+    color: var(--text-color-muted);
+    /* Muted color for nav items */
+    border: none;
+    padding: 12px 15px;
+    /* More padding */
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, transform 0.2s, padding-left 0.2s;
+    font-size: 18px;
+    border-radius: 5px;
+    /* Slightly more rounded buttons */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* Space between icon and text */
+}
+
+.nav-btn i {
+    /* Style for potential icons on nav buttons */
+    font-size: 1.1em;
+}
+
+.nav-btn:hover {
+    background-color: rgba(26, 188, 156, 0.2);
+    /* Soft teal hover */
+    color: var(--accent-color);
+    /* Teal color on hover */
+    padding-left: 25px;
+    /* Shift button to the right on hover */
+    transform: translateX(5px);
+    /* Slight nudge to the right */
+}
+
+/* Main Content Styling */
+.content {
+    flex-grow: 1;
+    padding: 30px;
+    background-color: var(--background-light);
+    /* Light background for content */
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    /* Stack content sections */
+    align-items: center;
+    /* Center content horizontally */
+    justify-content: flex-start;
+    /* Align content to the top */
+}
+
+h1 {
+    color: var(--secondary-color);
+    /* Dark blue-gray for main heading */
+    font-size: 2.25rem;
+    /* Larger heading */
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.content p {
+    /* Style for the introductory paragraph */
+    color: var(--text-color-muted);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+/* Welcome message styling - now part of main-content */
+#main-content {
+    text-align: center;
+    /* Center the welcome message */
+    width: 100%;
+}
+
+
+.inspection-actions {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--text-color-muted);
+    /* Subtle separator */
+    width: 100%;
+    max-width: 500px;
+    /* Limit width of action buttons section */
+    text-align: center;
+    /* Center actions */
+}
+
+.inspection-actions h3 {
+    color: var(--secondary-color);
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+/* Action Buttons Styling */
+.action-btn {
+    background-color: var(--secondary-color);
+    /* Dark blue-gray for primary actions */
+    color: var(--text-color-light);
+    border: none;
+    padding: 14px 25px;
+    /* More padding */
+    width: 100%;
+    /* Full width within its container */
+    max-width: 250px;
+    /* Max width for the buttons */
+    margin: 10px auto;
+    /* Center buttons */
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    font-size: 16px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    /* Softer shadow */
+    display: block;
+    /* Make them block elements for margin: auto to work */
+}
+
+.action-btn:hover {
+    background-color: var(--accent-color);
+    /* Teal on hover */
+    transform: translateY(-3px);
+    /* Lift effect */
+}
+
+/* Add a hover for buttons in general */
+button:hover {
+    filter: brightness(1.1);
+    /* Slightly lighten on hover for all buttons */
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.5);
+    /* Teal focus ring */
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 200px;
+        /* Narrower sidebar */
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        /* Smaller title on wider screens */
+    }
+
+    .nav-btn {
+        font-size: 16px;
+        padding: 10px 12px;
+    }
+
+    .content {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    .action-btn {
+        width: auto;
+        /* Let buttons size themselves */
+        max-width: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        padding: 1rem;
+    }
+
+    .header-content {
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .title-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+
+    .moto-text {
+        font-size: 0.85rem;
+        margin-top: 0.3rem;
+    }
+
+    .profile-container {
+        position: static;
+        margin-left: auto;
+        /* Push to right */
+        padding-left: 15px;
+        /* Space from previous element */
+    }
+
+    .profile-icon {
+        font-size: 1.5rem;
+    }
+
+    .dropdown-menu {
+        right: 15px;
+        /* Adjust dropdown position */
+    }
+
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        padding: 15px;
+    }
+
+    .sidebar-header {
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+    }
+
+    .sidebar h2 {
+        font-size: 20px;
+    }
+
+    .nav-btn {
+        font-size: 16px;
+        padding: 10px 10px;
+    }
+
+    .content {
+        padding: 20px 15px;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    .content p {
+        font-size: 1rem;
+    }
+
+    .inspection-actions {
+        margin-top: 25px;
+        padding-top: 15px;
+    }
+
+    .inspection-actions h3 {
+        font-size: 1.25rem;
+    }
+
+    .action-btn {
+        width: 100%;
+        max-width: none;
+        /* Remove max-width on mobile */
+        font-size: 14px;
+        padding: 12px;
+    }
+}

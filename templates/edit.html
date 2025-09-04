@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Hotel Information</title>
+    <link rel="stylesheet" href="edit.css">
+</head>
+<body>
+    <h2>Edit Hotel Information</h2>
+    <form action="/update_hotel_info" method="POST">
+        <label for="contact">Contact Information:</label>
+        <input type="text" id="contact" name="contact" value="123-456-7890">
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="hotel@example.com">
+        
+        <label for="status">Status:</label>
+        <select id="status" name="status">
+            <option value="Active">Active</option>
+            <option value="Closed">Closed</option>
+        </select>
+        
+        <button type="submit">Save Changes</button>
+    </form>
+</body>
+</html>

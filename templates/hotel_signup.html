@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Owner Signup</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/loginstyles.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
+</head>
+
+<body>
+    <div class="login-container">
+        <h2 class="centered-text">Hotel Owner Signup</h2>
+        <form id="signup-form">
+            <div class="form-group">
+                <label for="hotel_id">Hotel ID:</label>
+                <input type="text" id="hotel_id" name="hotel_id" required>
+            </div>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password:</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+            </div>
+            <button type="submit" class="login-btn">Signup</button>
+        </form>
+        <p class="error-message" id="error-message"></p>
+    </div>
+
+    <script>
+        document.getElementById("signup-form").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const username = document.getElementById("username").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const confirmPassword = document.getElementById("confirm-password").value.trim();
+            const hotel_id = document.getElementById("hotel_id").value.trim();
+            const errorMessage = document.getElementById("error-message");
+
+            // Validate form inputs
+            if (username === "" || email === "" || password === "" || confirmPassword === "" || hotel_id === "") {
+                errorMessage.textContent = "All fields are required.";
+            } else if (password !== confirmPassword) {
+                errorMessage.textContent = "Passwords do not match.";
+            } else {
+                // Send the data to the Flask backend
+                fetch('http://127.0.0.1:5000/register_hotel_manager', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        email: email,
+                        password: password,
+                        hotel_id: hotel_id
+
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message === "Hotel manager registered successfully!") {
+                            // Redirect to the login page on successful signup
+                            window.location.href = "/hotel_login_page";
+                        } else {
+                            errorMessage.textContent = data.message; // Display error message if registration fails
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        errorMessage.textContent = "Error during registration. Please try again.";
+                    });
+            }
+        });
+    </script>
+</body>
+
+</html>

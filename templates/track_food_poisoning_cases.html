@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Poisoning Cases</title>
+    <link rel="stylesheet" href="poisoning.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="fs.png" alt="Hotel Logo" class="header-logo">
+            <h2>SafeServe</h2>
+        </div>
+        <p class="moto-text">Your trusted partner for Safe and Quality Dining Experiences</p>
+    </header>
+   
+    <!-- Food Poisoning Cases Section -->
+    <section class="cases-section">
+        <h2>Food Poisoning Cases Reported</h2>
+        
+        <!-- Table for displaying cases -->
+        <table id="cases-table">
+            <thead>
+                <tr>
+                    <th>Hotel ID</th>
+                    <th>Report Date</th>
+                    <th>Symptoms</th>
+                    <th>Number of People Affected</th>
+                    <th>Investigation Status</th>
+                    <th>Conclusion</th>
+                </tr>
+            </thead>
+            <tbody id="cases-list">
+                <!-- Dynamic data rows will be inserted here -->
+            </tbody>
+        </table>
+    </section>
+
+    <!-- JavaScript for fetching food poisoning cases -->
+    <script>
+        // Assuming you have the hotel_id from the session or as part of the hotel owner's login
+        const hotelId = 1; // Example: Replace with actual hotel ID
+
+        // Fetch food poisoning cases for the hotel
+        fetch(`http://127.0.0.1:5000/food_poisoning_cases?hotel_id=${hotelId}`)
+            .then(response => response.json())
+            .then(cases => {
+                const casesList = document.getElementById('cases-list');
+                if (cases.length === 0) {
+                    casesList.innerHTML = '<tr><td colspan="6">No food poisoning cases reported for this hotel.</td></tr>';
+                } else {
+                    cases.forEach(caseData => {
+                        const caseRow = document.createElement('tr');
+                        caseRow.innerHTML = `
+                            <td>${caseData.hotel_id}</td>
+                            <td>${caseData.report_date}</td>
+                            <td>${caseData.symptoms}</td>
+                            <td>${caseData.number_of_people_affected}</td>
+                            <td>${caseData.investigation_status}</td>
+                            <td>${caseData.conclusion}</td>
+                        `;
+                        casesList.appendChild(caseRow);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching cases:', error);
+            });
+    </script>
+</body>
+</html>

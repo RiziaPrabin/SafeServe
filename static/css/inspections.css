@@ -1,0 +1,210 @@
+/* Body Styles */
+:root {
+    --primary: #000000;
+    --primary-dark: #0b0d11;
+    --secondary: #64748b;
+    --background: #f8fafc;
+    --card-bg: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #475569;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(8, 2, 2, 0.24);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+header {
+    position: relative;
+    background: rgba(255, 255, 255, 0.7); /* White background with opacity */
+    padding: 2rem 1.5rem;
+    box-shadow: var(--shadow-md);
+    z-index: 10;
+}
+
+/* Create a semi-transparent overlay over the background image */
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: url('af.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: var(--text-primary);
+    min-height: 100vh;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('af.jpg') no-repeat center center fixed;
+    background-size: cover;
+    filter: blur(5px); /* Apply blur to the background image */
+    z-index: -1; /* Ensure it stays behind the content */
+}
+
+/* Optionally add more transparency for the header text area to blend better */
+.header-content {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+
+.header-logo {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
+}
+
+h2 {
+    font-size: 2.25rem;
+    text-align: center;
+    color: var(--primary);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+}
+
+
+.moto-text {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+    margin-top: 0.75rem;
+    font-weight: 500;
+}
+
+/* Table container */
+.table-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.85); /* Slight transparency for consistency with the dashboard */
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md); /* Consistent shadow from dashboard */
+}
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Table header */
+thead {
+    background-color:white; /* Dark background with primary color */
+    color: rgb(102, 55, 55);
+}
+
+th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Table body */
+td {
+    padding: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 0.95rem;
+}
+
+/* Date column */
+td:first-child {
+    font-weight: 500;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+/* Inspector column */
+td:nth-child(2) {
+    font-weight: 500;
+    color: var(--primary);
+}
+
+/* Department column */
+td:nth-child(3) {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Status column styles */
+.status {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    display: inline-block;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.status-pass {
+    background-color: #c6f6d5;
+    color: #2f855a;
+}
+
+.status-warning {
+    background-color: #feebc8;
+    color: #c05621;
+}
+
+.status-fail {
+    background-color: #fed7d7;
+    color: #c53030;
+}
+
+/* Comments column */
+td:last-child {
+    color: var(--text-secondary);
+    min-width: 250px;
+    max-width: 400px;
+    line-height: 1.5;
+}
+
+/* Row hover effect */
+tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+    background-color: #f7fafc; /* Light hover effect, consistent with the dashboard hover */
+}
+
+/* Remove bottom border from last row */
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    h2 {
+        font-size: 1.875rem; /* Adjust header size for small screens */
+    }
+
+    table {
+        padding: 1rem; /* Less padding for small screens */
+    }
+
+    th, td {
+        font-size: 0.875rem; /* Smaller text for better readability on small screens */
+    }
+
+    .table-container {
+        padding: 1rem; /* Padding adjustment */
+    }
+}

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Signup</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/loginstyles.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
+</head>
+
+<body>
+    <div class="login-container">
+        <h2>Customer Signup</h2>
+        <form id="signup-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+            </div>
+            <button type="submit" class="login-btn">Signup</button>
+        </form>
+        <p class="error-message" id="error-message"></p>
+    </div>
+
+    <script>
+        document.getElementById("signup-form").addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent form submission to handle it with JS
+
+            // Retrieve form field values
+            const username = document.getElementById("username").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const confirmPassword = document.getElementById("confirm-password").value.trim();
+            const errorMessage = document.getElementById("error-message");
+
+            // Reset the error message
+            errorMessage.textContent = "";
+
+            // Input validation
+            if (!username || !email || !password || !confirmPassword) {
+                errorMessage.textContent = "All fields are required.";
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                errorMessage.textContent = "Invalid email format.";
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                errorMessage.textContent = "Passwords do not match.";
+                return;
+            }
+
+            // Send the data to the Flask backend
+            fetch('http://127.0.0.1:5000/register_customer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    password: password,
+                }),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        // Handle HTTP errors
+                        return response.json().then(data => {
+                            throw new Error(data.message || "An error occurred during registration.");
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.message === "Customer registered successfully!") {
+                        // Redirect to the login page on successful signup
+                        window.location.href = "customer_login_page";
+                    } else {
+                        // Display server error message
+                        errorMessage.textContent = data.message || "Registration failed.";
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    errorMessage.textContent = error.message || "Error during registration. Please try again.";
+                });
+        });
+
+        // Helper function to validate email format
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Login</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/loginstyles.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
+</head>
+
+<body>
+    <div class="login-container">
+        <h2>Customer Login</h2>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+        <p class="error-message" id="error-message"></p>
+        <p class="signup-link">New User? <a href="/customer_signup">Sign Up</a></p>
+    </div>
+
+    <script>
+        document.getElementById("login-form").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const errorMessage = document.getElementById("error-message");
+
+            if (username === "" || password === "") {
+                errorMessage.textContent = "Both fields are required.";
+                return;
+            }
+
+            fetch('http://127.0.0.1:5000/customer_login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                }),
+            })
+                .then(response => response.json().then(data => ({ ok: response.ok, data })))
+                .then(({ ok, data }) => {
+                    if (ok) {
+                        // If login is successful, redirect to the home page route
+                        window.location.href = "/home";
+                    } else {
+                        // Display error message from the server
+                        errorMessage.textContent = data.message || "Login failed.";
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    errorMessage.textContent = "An error occurred. Please try again.";
+                });
+        });
+    </script>
+</body>
+
+</html>

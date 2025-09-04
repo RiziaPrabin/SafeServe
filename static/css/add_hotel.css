@@ -1,0 +1,307 @@
+/* Base Styles and Variables */
+:root {
+    --primary-color: #e74c3c;
+    /* Red accent */
+    --secondary-color: #34495e;
+    /* Dark blue-gray */
+    --accent-color: #1abc9c;
+    /* Teal accent */
+    --background-light: #f8f9fa;
+    /* Very light gray */
+    --background-dark: #34495e;
+    /* Dark for sidebar */
+    --card-background: #ffffff;
+    --text-color-dark: #333;
+    --text-color-light: #ecf0f1;
+    /* Light text for dark backgrounds */
+    --text-color-muted: #95a5a6;
+    /* Muted text */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    /* Using Poppins font */
+    background-color: var(--background-light);
+    /* Light overall background */
+    color: var(--text-color-dark);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+    /* Prevent horizontal scroll */
+}
+
+/* Header Styling - Modified for centering logo and title */
+header {
+    background: rgba(255, 255, 255, 0.85);
+    /* Slightly more opaque background */
+    padding: 2rem 1.5rem;
+    /* Increased top/bottom padding for larger header */
+    box-shadow: var(--shadow-md);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    /* Stack items vertically */
+    justify-content: center;
+    /* Center items horizontally */
+    align-items: center;
+    /* Center items vertically */
+    text-align: center;
+    /* Center text content */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    /* Subtle separator */
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Center logo and title together */
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+    /* Space between logo/title and motto */
+}
+
+.title-icon {
+    width: 50px;
+    /* Adjusted logo size */
+    height: 50px;
+    object-fit: contain;
+}
+
+h2 {
+    font-size: 2.25rem;
+    /* Title font size */
+    color: var(--secondary-color);
+    /* Dark blue-gray for SafeServe title */
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    margin: 0;
+}
+
+.moto-text {
+    color: var(--text-color-muted);
+    font-size: 0.95rem;
+    /* Slightly larger motto text */
+    font-weight: 400;
+    margin-top: 0.5rem;
+    /* Space from title */
+}
+
+
+/* Main Content Wrapper and Form */
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    /* Align content to the top */
+    flex-grow: 1;
+    /* Allows it to take up available space */
+    padding: 2rem 1rem;
+    /* Padding around the content */
+    min-height: calc(100vh - var(--header-height, 120px));
+    /* Adjust height to account for header */
+}
+
+.content-wrapper h2 {
+    font-size: 2rem;
+    /* Size for "Add New Hotel" heading */
+    color: var(--secondary-color);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    margin-top: 1rem;
+    /* Space above the heading */
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    /* Limit form width */
+    background: rgba(255, 255, 255, 0.85);
+    /* Slightly transparent white for form background */
+    padding: 2.5rem;
+    /* More padding inside the form */
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    /* Use a softer shadow */
+}
+
+/* Form Group Styling */
+.form-group {
+    margin-bottom: 1.5rem;
+    /* Space between form fields */
+}
+
+/* Label styles */
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #2d3748;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+/* Input and select styles */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="date"],
+select {
+    width: 100%;
+    padding: 0.9rem;
+    /* Slightly more padding */
+    border: 2px solid #e2e8f0;
+    /* Light border */
+    border-radius: 6px;
+    font-size: 1rem;
+    color: var(--text-color-dark);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    /* Teal border on focus */
+    box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.2);
+    /* Teal focus ring */
+}
+
+/* Select specific styles */
+select {
+    appearance: none;
+    /* Remove default dropdown arrow */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%234A5568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    /* Custom dropdown arrow */
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1em;
+    padding-right: 2.5rem;
+    /* Space for the custom arrow */
+}
+
+/* Button styles */
+.submit-btn {
+    width: 100%;
+    padding: 0.95rem;
+    /* Slightly more padding */
+    background-color: var(--secondary-color);
+    /* Dark blue-gray for the button */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+}
+
+.submit-btn:hover {
+    background-color: var(--accent-color);
+    /* Teal on hover */
+    transform: translateY(-2px);
+    /* Lift effect */
+    box-shadow: 0 4px 8px rgba(26, 188, 156, 0.3);
+    /* Teal shadow on hover */
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        /* Stack header items */
+        padding: 1.5rem 1rem;
+    }
+
+    .header-content {
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .title-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    .moto-text {
+        font-size: 0.85rem;
+        margin-top: 0.3rem;
+    }
+
+    .profile-container {
+        position: static;
+        /* Remove absolute positioning */
+        margin-left: auto;
+        /* Push to right */
+        padding-left: 15px;
+        /* Space from previous element */
+    }
+
+    .profile-icon {
+        font-size: 1.5rem;
+    }
+
+    .dropdown-menu {
+        position: absolute;
+        /* Keep dropdown absolute */
+        top: 100%;
+        right: 15px;
+        /* Adjust dropdown position */
+        margin-top: 0.5rem;
+    }
+
+    .content-wrapper {
+        padding: 1.5rem 0.75rem;
+        /* Adjust padding for smaller screens */
+    }
+
+    .content-wrapper h2 {
+        font-size: 1.75rem;
+        /* Smaller heading on mobile */
+    }
+
+    .container {
+        padding: 1.5rem;
+        /* Adjust form padding */
+        max-width: 90%;
+        /* Allow form to be wider on mobile */
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="date"],
+    select {
+        padding: 0.8rem;
+        /* Slightly less padding in inputs */
+        margin-bottom: 1rem;
+        /* Less margin between inputs */
+    }
+
+    .submit-btn {
+        padding: 0.875rem;
+        /* Less padding in button */
+        font-size: 0.95rem;
+    }
+}

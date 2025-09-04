@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspections History</title>
+    <link rel="stylesheet" href="inspections.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="fs.png" alt="Hotel Logo" class="header-logo">
+            <h2>SafeServe</h2>
+        </div>
+        <p class="moto-text">Your trusted partner for Safe and Quality Dining Experiences</p>
+    </header>
+
+    <h2>Inspections History</h2>
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Inspector ID</th>
+                <th>Status</th>
+                <th>Comments</th>
+            </tr>
+        </thead>
+        <tbody id="inspection-data">
+            <!-- Rows will be dynamically added here -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const hotelId = 1; // Replace with the actual hotel ID dynamically if available
+        fetch(`/hotel_inspections?hotel_id=${hotelId}`)
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById('inspection-data');
+                data.forEach(inspection => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${inspection.inspection_date}</td>
+                        <td>${inspection.inspector_id}</td>
+                        <td>${inspection.overall_result}</td>
+                        <td>${inspection.comments}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error fetching inspections:', error));
+    });
+</script>

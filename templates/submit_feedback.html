@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeServe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylessf.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
+</head>
+
+<body>
+    <!-- Header Section with Title and Caption -->
+    <header class="header">
+        <div class="title-container">
+            <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Icon" class="title-icon">
+            <h1 class="title">SafeServe</h1>
+        </div>
+        <h3 class="caption">Your Trusted Partner for Safe and Quality Dining Experiences</h3>
+    </header>
+
+    <!-- Navigation Links Section -->
+    <nav class="navigation">
+        <ul>
+            <li><a href="/home">Home</a></li>
+            <li><a href="/submit_feedback_page">Submit Feedback</a></li>
+            <li><a href="/report_food_poisoning_page">Report Food Poisoning</a></li>
+        </ul>
+    </nav>
+
+    <h2 class="submit-feedback-heading">Submit Feedback</h2>
+
+    <form action="/submit_feedback" method="POST" id="feedback-form" class="feedback-form">
+        <div class="form-group">
+            <label for="hotel_id">Enter Hotel ID:</label>
+            <input type="text" id="hotel_id" name="hotel_id" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="feedback_date">Date of Feedback:</label>
+            <input type="date" id="feedback_date" name="feedback_date" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="customer_name">Your Name:</label>
+            <input type="text" id="customer_name" name="customer_name" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="feedback_content">Feedback:</label>
+            <textarea id="feedback_content" name="feedback_content" class="form-control" rows="5" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="action_taken">Action Taken:</label>
+            <input type="text" id="action_taken" name="action_taken" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="status">Status:</label>
+            <select id="status" name="status" class="form-control">
+                <option value="Reviewed">Reviewed</option>
+                <option value="Addressed">Addressed</option>
+            </select>
+        </div>
+        <button type="submit" class="submit-btn">Submit Feedback</button>
+    </form>
+
+    <script>
+        document.getElementById('feedback-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Collect form data
+            const feedbackData = {
+                hotel_id: document.getElementById('hotel_id').value,
+                feedback_date: document.getElementById('feedback_date').value,
+                customer_name: document.getElementById('customer_name').value,
+                feedback_content: document.getElementById('feedback_content').value,
+                action_taken: document.getElementById('action_taken').value,
+                status: document.getElementById('status').value
+            };
+            // Basic form validation
+            if (!feedbackData.hotel_id || !feedbackData.feedback_date || !feedbackData.customer_name || !feedbackData.feedback_content) {
+                alert("All fields are required.");
+            } else {
+                // Send data to Flask backend using Fetch API
+                fetch('http://127.0.0.1:5000/submit_feedback', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(feedbackData)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message); // Show success message
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
+        });
+    </script>
+
+    </script>
+</body>
+
+</html>
