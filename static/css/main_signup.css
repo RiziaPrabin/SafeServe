@@ -24,7 +24,14 @@ body {
     width: 100%;
     max-width: 1200px;
     gap: 80px;
-    /* Generous gap for clear separation */
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+    /* Smooth fade-in transition */
+}
+
+/* This class will hide the main content initially */
+.main-container.hidden {
+    opacity: 0;
 }
 
 /* Left side: Content and Header */
@@ -74,13 +81,11 @@ body {
 /* Right side: Login Form */
 .login-section {
     flex: 0 0 400px;
-    /* Fixed width for the login container */
 }
 
 /* Login Container */
 .login-container {
     background: rgba(10, 10, 10, 0.4);
-    /* Darker, less transparent background */
     backdrop-filter: blur(15px);
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -139,3 +144,47 @@ button {
 button:hover {
     transform: scale(1.05);
 }
+
+/* --- START: NEW STYLES FOR PRELOADER --- */
+
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #0c0c0c;
+    /* A dark background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+    /* Smooth fade-out */
+}
+
+.preloader-logo {
+    width: 120px;
+    height: 120px;
+    animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* --- END: NEW STYLES --- */

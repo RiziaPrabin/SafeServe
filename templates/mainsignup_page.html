@@ -7,12 +7,19 @@
     <title>SafeServe - Home</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main_signup.css') }}">
-    <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
+
 </head>
 
 <body>
+    <!-- START: Preloader Animation -->
+    <div id="preloader">
+        <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Icon" class="preloader-logo">
+    </div>
+    <!-- END: Preloader Animation -->
 
-    <div class="main-container">
+
+    <!-- The main content is hidden initially -->
+    <div class="main-container hidden">
         <div class="content-section">
             <header class="header">
                 <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Icon" class="header-icon">
@@ -21,7 +28,7 @@
             </header>
 
             <section class="hero">
-                <h2>Ensuring Diner Safety, One Inspection at a Time.</h2>
+                <h2>Beyond the Five Stars : <br><small>The Safety You Deserve !</small></h2>
                 <p>A seamless, transparent platform connecting hotels, inspectors, and the public to uphold the highest
                     standards of food safety.</p>
             </section>
@@ -45,6 +52,22 @@
     </div>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        // This simple script handles the preloader animation
+        window.addEventListener('load', function () {
+            const preloader = document.getElementById('preloader');
+            const mainContent = document.querySelector('.main-container');
+
+            // Start fading out the preloader
+            preloader.style.opacity = '0';
+
+            // After the fade-out animation completes, hide it and show the main content
+            setTimeout(() => {
+                preloader.style.display = 'none';
+                mainContent.classList.remove('hidden');
+            }, 500); // This delay should match the transition duration in the CSS
+        });
+    </script>
 </body>
 
 </html>
