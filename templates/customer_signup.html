@@ -7,11 +7,12 @@
     <title>Customer Signup</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/loginstyles.css') }}">
-    <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
+
 </head>
 
 <body>
     <div class="login-container">
+        <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Logo" class="login-logo">
         <h2>Customer Signup</h2>
         <form id="signup-form">
             <div class="form-group">
@@ -34,7 +35,9 @@
         </form>
         <p class="error-message" id="error-message"></p>
     </div>
-
+    <footer>
+        <p>&copy; 2025 SafeServe. All Rights Reserved.</p>
+    </footer>
     <script>
         document.getElementById("signup-form").addEventListener("submit", function (event) {
             event.preventDefault(); // Prevent form submission to handle it with JS
