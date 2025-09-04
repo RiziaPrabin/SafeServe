@@ -11,6 +11,7 @@
 
 <body>
     <div class="login-container">
+        <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Logo" class="login-logo">
         <h2 class="centered-text">Hotel Manager Login</h2>
         <form id="login-form">
             <div class="form-group">
@@ -27,6 +28,9 @@
         <p class="signup-link">New User? <a href="/hotelman_signup">Sign Up</a></p>
     </div>
 
+    <footer>
+        <p>&copy; 2025 SafeServe. All Rights Reserved.</p>
+    </footer>
     <script>
         document.getElementById("login-form").addEventListener("submit", function (event) {
             event.preventDefault();

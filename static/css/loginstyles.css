@@ -3,7 +3,7 @@ body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../images/login_bg.jpg');
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)), url('../images/main_p.jpg');
     background-size: cover;
     background-position: center;
     height: 100vh;
@@ -26,9 +26,23 @@ body {
     text-align: center;
 }
 
+.login-logo {
+    width: 80px;
+    /* Controls the size of the logo */
+    height: auto;
+    /* Keeps the logo from stretching */
+    margin: 0 auto 20px auto;
+    /* Centers the logo and adds space below it */
+    display: block;
+}
+
+/* --- END: Added styles --- */
+
 h2 {
-    margin-bottom: 30px;
-    font-size: 2.5rem;
+    /* CHANGE 3: Reduced the bottom margin to bring it closer to the fields */
+    margin-bottom: 20px;
+    font-size: 2.2rem;
+    /* Slightly smaller to balance with the logo */
     color: #fff;
     font-weight: 700;
 }
@@ -107,3 +121,19 @@ input[type="password"]:focus {
     color: #fff;
     text-decoration: underline;
 }
+
+/* --- START: NEW FOOTER STYLES --- */
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    color: #ccc;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 0.9rem;
+    z-index: 1000;
+}
+
+/* --- END: NEW FOOTER STYLES --- */
