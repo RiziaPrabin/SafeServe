@@ -61,7 +61,9 @@
                 })
                 .then(data => {
                     if (data.message === 'Login successful!') {
-                        // Redirect to dashboard or another page after successful login
+                        // MODIFIED: Save the inspector's ID to the browser's session storage
+                        sessionStorage.setItem('inspector_id', data.inspector_id);
+                        // Redirect to the dashboard
                         window.location.href = "/inspector_dashboard";
                     }
                 })

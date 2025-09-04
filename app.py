@@ -15,13 +15,11 @@ db = mysql.connector.connect(
     database="food_security_db"
 )
 
-# --- Route to Serve the Main HTML Page ---
 inspector_credentials = [
-    {'username': 'inspector1', 'password': 'inspectpass1'},
-    {'username': 'inspector2', 'password': 'inspectpass2'},
-    {'username': 'inspector3', 'password': 'inspectpass3'}
+    {'username': 'inspector1', 'password': 'ipass1', 'id': 1},
+    {'username': 'inspector2', 'password': 'ipass2', 'id': 2},
+    {'username': 'inspector3', 'password': 'ipass3', 'id': 3}
 ]
-
 
 @app.route('/')
 def index():
@@ -105,14 +103,14 @@ def customer_login():
 
 @app.route('/inspector_login', methods=['POST'])
 def inspector_login():
-    # MODIFIED: This now checks against the hardcoded list instead of the database.
     data = request.json
     username = data.get('username')
     password = data.get('password')
 
     for creds in inspector_credentials:
         if creds['username'] == username and creds['password'] == password:
-            return jsonify({'message': 'Login successful!'}), 200
+            # MODIFIED: Now returns the inspector's ID on successful login
+            return jsonify({'message': 'Login successful!', 'inspector_id': creds['id']}), 200
     
     return jsonify({'message': 'Invalid credentials!'}), 401
 
@@ -329,6 +327,52 @@ def get_food_poisoning_cases():
         return jsonify({'message': 'An error occurred while fetching the cases.'}), 500
 
 # --- END: New routes ---
+
+# --- START: New routes for the inspection workflow ---
+
+# This route displays the page where the inspector enters the Hotel ID
+@app.route('/start_inspection_page')
+def start_inspection_page():
+    return render_template('start_inspection.html')
+
+# This route takes the Hotel ID from the URL and displays the main inspection form
+@app.route('/inspection_form/<int:hotel_id>')
+def inspection_form(hotel_id):
+    # The hotel_id is passed to the template so it can be displayed and used in the form
+    return render_template('inspection_form.html', hotel_id=hotel_id)
+
+# This is the API endpoint that saves the inspection data to the database
+@app.route('/api/inspections', methods=['POST'])
+def add_inspection():
+    try:
+        data = request.json
+        
+        query = """
+            INSERT INTO inspections (hotel_id, inspection_date, inspector_id, overall_result, comments)
+            VALUES (%s, %s, %s, %s, %s)
+        """
+        values = (
+            data.get('hotel_id'),
+            data.get('inspection_date'),
+            data.get('inspector_id'),
+            data.get('overall_result'),
+            data.get('comments')
+        )
+
+        cursor = db.cursor()
+        cursor.execute(query, values)
+        db.commit()
+        cursor.close()
+
+        return jsonify({'message': 'Inspection submitted successfully!'}), 201
+
+    except Exception as e:
+        db.rollback()
+        # It's good practice to log the error for debugging
+        print(f"Database error: {str(e)}")
+        return jsonify({'message': 'An error occurred while submitting the inspection.'}), 500
+
+# --- END: New inspection routes ---
 
 
 

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start New Inspection</title>
+    <!-- Link to the new stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/start_inspection.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Icon" class="title-icon">
+            <h2>Start New Inspection</h2>
+        </div>
+        <p class="moto-text">
+            <a href="/inspector_dashboard">&larr; Back to Dashboard</a>
+        </p>
+    </header>
+
+    <div class="form-container">
+        <form id="start-inspection-form">
+            <div class="form-group">
+                <label for="hotel_id">Enter Hotel ID to Inspect</label>
+                <input type="number" id="hotel_id" name="hotel_id" placeholder="e.g., 101" required>
+            </div>
+            <button type="submit" class="submit-btn">Proceed to Inspection Form</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('start-inspection-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const hotelId = document.getElementById('hotel_id').value;
+            if (hotelId) {
+                // Redirects to the dynamic route for the inspection form, passing the hotel ID in the URL
+                window.location.href = `/inspection_form/${hotelId}`;
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -54,7 +54,6 @@
             <div class="inspection-actions">
                 <h3>Inspection Actions</h3>
                 <button class="action-btn" id="startInspectionBtn">Start New Inspection</button>
-                <button class="action-btn" onclick="action('Generate Report')">Generate Report</button>
             </div>
         </main>
     </div>
@@ -62,7 +61,7 @@
     <script>
         // Handle the navigation for "Start New Inspection" button
         document.getElementById('startInspectionBtn').addEventListener('click', function () {
-            window.location.href = '/add_insp';
+            window.location.href = '/start_inspection_page';
         });
 
         // Handle the navigation for "Add Hotels" button in the sidebar
@@ -90,13 +89,7 @@
             }
         }
 
-        function action(actionName) {
-            if (actionName === 'Generate Report') {
-                window.location.href = '/food_insp_report';
-            } else {
-                alert('Performing action: ' + actionName);
-            }
-        }
+
     </script>
 </body>
 

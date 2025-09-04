@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspection Form</title>
+    <!-- Reusing your dashboard styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashbo.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Icon" class="title-icon">
+            <h2>Inspection for Hotel #{{ hotel_id }}</h2>
+        </div>
+        <p class="moto-text"><a href="/inspector_dashboard" style="text-decoration: none; color: inherit;">&larr; Back
+                to Dashboard</a></p>
+    </header>
+
+    <div class="container" style="max-width: 800px; margin-top: 2rem;">
+        <main class="content"
+            style="padding: 2rem; background: #fff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            <!-- MODIFIED: The hotel_id is now safely stored in a data-* attribute -->
+            <form id="inspection-form" data-hotel-id="{{ hotel_id }}">
+                <div class="form-group">
+                    <label for="inspection_date">Inspection Date</label>
+                    <input type="date" id="inspection_date" name="inspection_date" required>
+                </div>
+                <div class="form-group">
+                    <label for="overall_result">Overall Result</label>
+                    <select id="overall_result" name="overall_result" required>
+                        <option value="Passed">Passed</option>
+                        <option value="Failed">Failed</option>
+                        <option value="Needs Improvement">Needs Improvement</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="comments">Comments</label>
+                    <textarea id="comments" name="comments" rows="5"></textarea>
+                </div>
+                <button type="submit" class="action-btn" style="width: 100%;">Submit Inspection</button>
+            </form>
+        </main>
+    </div>
+
+    <script>
+        document.getElementById('inspection-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const loggedInInspectorId = sessionStorage.getItem('inspector_id');
+            // MODIFIED: We now safely get the hotelId from the form's data attribute
+            const hotelId = event.target.dataset.hotelId;
+
+            if (!loggedInInspectorId) {
+                alert('Could not find Inspector ID. Please log in again.');
+                return;
+            }
+            if (!hotelId) {
+                alert('Could not find Hotel ID. Please go back and start the inspection again.');
+                return;
+            }
+
+            // This object is now pure JavaScript, with no Jinja2 syntax
+            const inspectionData = {
+                hotel_id: hotelId,
+                inspector_id: loggedInInspectorId,
+                inspection_date: document.getElementById('inspection_date').value,
+                overall_result: document.getElementById('overall_result').value,
+                comments: document.getElementById('comments').value
+            };
+
+            fetch('/api/inspections', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(inspectionData)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(text => { throw new Error('Server Error: ' + text) });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert(data.message);
+                    window.location.href = '/inspector_dashboard';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please check the console and server logs.');
+                });
+        });
+    </script>
+</body>
+
+</html>
