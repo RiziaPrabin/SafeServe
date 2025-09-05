@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Case</title>
-    <!-- Reusing your clean table styles -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/view_cases.css') }}">
+    <!-- This links to the CSS file you have in the Canvas -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/update_case.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
 </head>
 
@@ -19,14 +19,15 @@
         <p class="moto-text">Your Trusted Partner for Safe and Quality Dining Experiences</p>
     </header>
 
+    <!-- This new structure creates the centered form layout -->
     <div class="main-content">
-        <div class="table-container">
-            <div class="table-header">
-                <h2>Update Case #${case.case_id}</h2>
-                <a href="/view_food_poisoning_cases" class="back-link">&larr; Back to All Cases</a>
+        <div class="form-container">
+            <div class="form-header">
+                <h2>Update Case</h2>
+                <a href="/view_food_poisoning_cases" class="back-link">&larr; Back to Dashboard</a>
             </div>
-            <!-- The form is pre-filled with data passed from your Flask app -->
-            <form id="update-case-form" class="update-form" data-case-id="{{ case.case_id }}">
+
+            <form id="update-case-form" data-case-id="{{ case.case_id }}">
                 <div class="form-group">
                     <label for="investigation_status">Investigation Status</label>
                     <select id="investigation_status" name="investigation_status">

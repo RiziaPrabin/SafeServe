@@ -1,0 +1,200 @@
+/* General Styling */
+:root {
+    --primary-color: #e67e22;
+    /* Orange for accents and buttons */
+    --background-dark: #121212;
+    /* Very dark background */
+    --card-background: rgba(30, 30, 30, 0.6);
+    /* Slightly more transparent card */
+    --text-color-light: #ecf0f1;
+    --text-color-muted: #95a5a6;
+    --border-color: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-dark);
+    color: var(--text-color-light);
+    min-height: 100vh;
+}
+
+/* Header Section */
+.header {
+    background-color: #1a1a1a;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.title-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.header h1 {
+    font-size: 1.75rem;
+    font-weight: 600;
+}
+
+.moto-text {
+    color: var(--text-color-muted);
+    font-size: 0.9rem;
+    margin-inline: auto;
+}
+
+/* Main Content Wrapper */
+.main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 1rem;
+    flex-grow: 1;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    /* --- START: Style Update --- */
+    /* This is the key to making the 3D rotation work */
+    perspective: 1000px;
+    /* --- END: Style Update --- */
+}
+
+/* Form Container Styling */
+.form-container {
+    background: var(--card-background);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.form-header h2 {
+    font-size: 2.25rem;
+    color: #fff;
+    font-weight: 700;
+}
+
+.form-header .back-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+    display: inline-block;
+    margin-top: 0.5rem;
+}
+
+.form-header .back-link:hover {
+    color: #fff;
+}
+
+/* Form Group and Input Styling */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-color-muted);
+}
+
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.2);
+    color: var(--text-color-light);
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.form-group select {
+    cursor: pointer;
+}
+
+.form-group select option {
+    background-color: #333;
+}
+
+/* Button Styling */
+.update-btn {
+    width: 100%;
+    padding: 0.85rem;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--primary-color);
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.update-btn:hover {
+    background-color: #d35400;
+    /* Darker orange */
+    transform: translateY(-2px);
+}
+
+/* --- START: Corrected Background Animation --- */
+.main-content::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 600px;
+    /* Slightly larger */
+    height: 600px;
+    background-image: url('../images/icon.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.15;
+    /* Made it more visible */
+    z-index: -1;
+    /* MODIFIED: The animation now includes the transform */
+    animation: rotateOnAxis 45s linear infinite;
+    filter: drop-shadow(0 0 15px hsla(30, 80%, 50%, 0.2));
+}
+
+/* MODIFIED: New @keyframes for 3D rotation on the Y-axis */
+@keyframes rotateOnAxis {
+    from {
+        transform: translate(-50%, -50%) rotateY(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotateY(360deg);
+    }
+}
+
+/* --- END: Corrected Background Animation --- */
