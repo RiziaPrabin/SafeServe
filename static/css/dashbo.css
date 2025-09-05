@@ -1,21 +1,15 @@
 /* Base Styles and Variables */
 :root {
-    --primary-color: #e74c3c;
-    /* Red accent for primary actions */
-    --secondary-color: #34495e;
-    /* Dark blue-gray for text and sidebar */
-    --accent-color: #1abc9c;
-    /* Teal accent for hover effects */
-    --background-light: #f8f9fa;
-    /* Very light gray for main background */
-    --background-dark: #34495e;
-    /* Dark for sidebar */
-    --card-background: #ffffff;
+    --primary-color: #e67e22;
+    /* Orangish-red */
+    --secondary-color: #1a1a1a;
+    /* Very dark gray/black for backgrounds */
+    --accent-color: #f39c12;
+    /* Brighter orange for highlights */
     --text-color-dark: #333;
     --text-color-light: #ecf0f1;
     /* Light text for dark backgrounds */
-    --text-color-muted: #95a5a6;
-    /* Muted text */
+    --text-color-muted: #a0a0a0;
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -29,78 +23,101 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    /* Using Poppins font */
-    background-color: var(--background-light);
-    /* Light overall background */
-    color: var(--text-color-dark);
+    background-color: var(--secondary-color);
+    /* Dark background for the whole page */
+    color: var(--text-color-light);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     overflow-x: hidden;
-    /* Prevent horizontal scroll */
 }
 
-/* Header Styling (Similar to Hotel Dashboard but simplified) */
-header {
-    background: rgba(255, 255, 255, 0.85);
-    /* Slightly more opaque background */
-    padding: 1.5rem 1.5rem;
+/* Header Styling */
+.main-header {
+    background: rgba(26, 26, 26, 0.9);
+    padding: 0.5rem 2rem;
     box-shadow: var(--shadow-md);
     z-index: 10;
     display: flex;
     justify-content: space-between;
-    /* Space between logo/title and profile */
+    /* Aligns left, center, and right groups */
     align-items: center;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    /* Subtle separator */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    height: 75px;
+    /* Original header height */
 }
 
-.header-content {
+/* Container for the logo and title group */
+.header-left-content {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    /* This group is aligned to the left by main-header's justify-content */
 }
 
 .title-icon {
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     object-fit: contain;
+    filter: drop-shadow(0 0 10px hsla(30, 80%, 50%, 0.5));
+    /* Orange glow */
 }
 
 h2 {
-    font-size: 1.75rem;
-    color: var(--secondary-color);
-    /* Dark blue-gray for SafeServe title */
-    font-weight: 600;
-    letter-spacing: -0.025em;
+    /* SafeServe title in header */
+    font-size: 2rem;
+    color: var(--primary-color);
+    /* Orange title */
+    font-weight: 700;
+    letter-spacing: -0.03em;
     margin: 0;
 }
 
+/* Container for the subtitle */
+.header-center-content {
+    flex-grow: 1;
+    /* Allows this to take available space */
+    text-align: center;
+    /* Center the text */
+    margin: 0 20px;
+    /* Push away from left and right edges */
+}
+
 .moto-text {
+    /* Subtitle in header */
     color: var(--text-color-muted);
-    font-size: 0.9rem;
-    font-weight: 400;
-    margin-left: 1rem;
-    /* Space from the title */
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* Container for the profile icon */
+.header-right-content {
+    flex: 0 0 auto;
+    /* Keep profile icon in its place */
+    display: flex;
+    align-items: center;
+    /* Ensure it's aligned vertically */
 }
 
 /* Profile Icon and Dropdown */
 .profile-container {
     position: relative;
-    /* Needed for absolute positioning of dropdown */
     display: flex;
+    /* Crucial for aligning the icon and potentially the dropdown */
     align-items: center;
+    cursor: pointer;
 }
 
 .profile-icon {
-    font-size: 1.75rem;
-    color: var(--text-color-muted);
-    cursor: pointer;
+    font-size: 2rem;
+    color: var(--accent-color);
+    /* Orange for profile icon */
     transition: color 0.3s ease;
 }
 
 .profile-icon:hover {
-    color: var(--secondary-color);
+    color: var(--primary-color);
+    /* Deeper orange on hover */
 }
 
 .dropdown-menu {
@@ -108,368 +125,362 @@ h2 {
     position: absolute;
     top: 100%;
     right: 0;
-    background-color: white;
-    box-shadow: var(--shadow-md);
-    border-radius: 8px;
+    background-color: #2a2a2a;
+    box-shadow: var(--shadow-lg);
+    border-radius: 10px;
     z-index: 100;
-    margin-top: 0.5rem;
-    min-width: 180px;
+    margin-top: 0.75rem;
+    min-width: 200px;
 }
 
 .dropdown-menu ul li {
-    padding: 0.75rem 1rem;
+    padding: 0.85rem 1.2rem;
     transition: background-color 0.2s ease;
 }
 
 .dropdown-menu ul li a {
     text-decoration: none;
-    color: var(--text-color-dark);
+    color: var(--text-color-light);
     display: block;
     font-weight: 500;
+    font-size: 1rem;
 }
 
 .dropdown-menu ul li:hover {
-    background-color: #f1f1f1;
+    background-color: #3a3a3a;
 }
 
-/* This class will be toggled by JavaScript to show the menu */
 .dropdown-menu.show {
     display: block;
 }
 
-/* REMOVED: The problematic hover rule has been deleted.
-   .profile-container:hover .dropdown-menu {
-       display: block;
-   }
-*/
-
-/* Main Layout: Sidebar + Content */
-.container {
-    display: flex;
-    width: 100%;
+/* Main Content Area */
+.main-content-area {
     flex-grow: 1;
-    /* Allows content to take remaining height */
-}
-
-/* Sidebar Styling */
-.sidebar {
-    background: var(--background-dark);
-    /* Dark background for sidebar */
-    color: var(--text-color-light);
-    width: 280px;
-    /* Slightly wider sidebar */
-    padding: 20px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    box-shadow: 4px 0 8px rgba(0, 0, 0, 0.1);
-    height: calc(100vh - 100px);
-    /* Adjust height to be below header */
-    overflow-y: auto;
-    /* Add scroll if content overflows */
+    align-items: center;
+    justify-content: center;
+    padding-top: 75px;
+    /* Original header height */
     position: relative;
-    /* For sidebar header positioning */
+    overflow: hidden;
 }
 
-.sidebar-header {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 25px;
+/* Animated Background for Logo */
+.animated-background {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    padding-bottom: 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    /* Separator for header */
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--secondary-color);
+    /* Black background */
+    z-index: 0;
 }
 
-.sidebar-icon {
-    width: 36px;
-    height: 36px;
-    object-fit: contain;
+.animated-logo {
+    width: 50%;
+    max-width: 400px;
+    height: auto;
+    opacity: 0.25;
+    /* Increased brightness */
+    animation: rotateY360 15s linear infinite;
+    /* Faster rotation (15s) */
+    filter: drop-shadow(0 0 25px hsla(30, 80%, 60%, 0.5));
+    /* Brighter orange glow */
 }
 
-.sidebar h2 {
-    font-size: 24px;
-    font-weight: 600;
+@keyframes rotateY360 {
+    from {
+        transform: rotateY(0deg);
+    }
+
+    to {
+        transform: rotateY(360deg);
+    }
+}
+
+/* Content Wrapper to ensure elements are above background */
+.content-wrapper {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1100px;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.dashboard-title {
     color: var(--text-color-light);
-    /* Light color for sidebar title */
-    margin: 0;
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    margin-bottom: 50px;
 }
 
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-    width: 100%;
+/* Card Layout */
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+    justify-content: center;
 }
 
-.sidebar ul li {
-    margin: 10px 0;
-}
-
-.nav-btn {
-    background: transparent;
-    color: var(--text-color-muted);
-    /* Muted color for nav items */
-    border: none;
-    padding: 12px 15px;
-    /* More padding */
-    width: 100%;
-    text-align: left;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s, transform 0.2s, padding-left 0.2s;
-    font-size: 18px;
-    border-radius: 5px;
-    /* Slightly more rounded buttons */
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    /* Space between icon and text */
-}
-
-.nav-btn i {
-    /* Style for potential icons on nav buttons */
-    font-size: 1.1em;
-}
-
-.nav-btn:hover {
-    background-color: rgba(26, 188, 156, 0.2);
-    /* Soft teal hover */
-    color: var(--accent-color);
-    /* Teal color on hover */
-    padding-left: 25px;
-    /* Shift button to the right on hover */
-    transform: translateX(5px);
-    /* Slight nudge to the right */
-}
-
-/* Main Content Styling */
-.content {
-    flex-grow: 1;
+.card {
+    background-color: rgba(40, 30, 20, 0.7);
+    /* More transparent dark cards */
+    border-radius: 16px;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
     padding: 30px;
-    background-color: var(--background-light);
-    /* Light background for content */
-    overflow-y: auto;
+    text-align: center;
     display: flex;
     flex-direction: column;
-    /* Stack content sections */
     align-items: center;
-    /* Center content horizontally */
-    justify-content: flex-start;
-    /* Align content to the top */
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-h1 {
-    color: var(--secondary-color);
-    /* Dark blue-gray for main heading */
-    font-size: 2.25rem;
-    /* Larger heading */
-    text-align: center;
-    margin-bottom: 15px;
-    font-weight: 600;
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4);
 }
 
-.content p {
-    /* Style for the introductory paragraph */
-    color: var(--text-color-muted);
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 30px;
-}
-
-/* Welcome message styling - now part of main-content */
-#main-content {
-    text-align: center;
-    /* Center the welcome message */
-    width: 100%;
-}
-
-
-.inspection-actions {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid var(--text-color-muted);
-    /* Subtle separator */
-    width: 100%;
-    max-width: 500px;
-    /* Limit width of action buttons section */
-    text-align: center;
-    /* Center actions */
-}
-
-.inspection-actions h3 {
-    color: var(--secondary-color);
-    font-weight: 600;
-    font-size: 1.5rem;
+.card-icon {
+    font-size: 3rem;
+    color: var(--accent-color);
+    /* Brighter orange icon */
     margin-bottom: 20px;
 }
 
-/* Action Buttons Styling */
-.action-btn {
-    background-color: var(--secondary-color);
-    /* Dark blue-gray for primary actions */
+.card h3 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    /* Orange card titles */
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.card p {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    /* Lighter text for card paragraphs */
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+/* Common Button Styling for all cards */
+.card-action-btn,
+.action-btn.primary-action {
+    background-color: var(--accent-color);
+    /* Default button color */
     color: var(--text-color-light);
     border: none;
-    padding: 14px 25px;
-    /* More padding */
-    width: 100%;
-    /* Full width within its container */
-    max-width: 250px;
-    /* Max width for the buttons */
-    margin: 10px auto;
-    /* Center buttons */
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
-    font-size: 16px;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    /* Softer shadow */
-    display: block;
-    /* Make them block elements for margin: auto to work */
+    box-shadow: var(--shadow-sm);
+    width: auto;
+    display: inline-block;
 }
 
-.action-btn:hover {
-    background-color: var(--accent-color);
-    /* Teal on hover */
+.card-action-btn:hover,
+.action-btn.primary-action:hover {
+    background-color: var(--primary-color);
+    /* Deeper orange on hover */
     transform: translateY(-3px);
-    /* Lift effect */
 }
 
-/* Add a hover for buttons in general */
-button:hover {
-    filter: brightness(1.1);
-    /* Slightly lighten on hover for all buttons */
+/* Specific Overrides for the Start Inspection Card */
+.inspection-start-card {
+    border: 2px solid var(--primary-color);
+    /* Orange border */
+    background: linear-gradient(to bottom, rgba(40, 30, 20, 0.8), rgba(50, 35, 25, 0.8));
+    /* Darker gradient */
 }
 
-button:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.5);
-    /* Teal focus ring */
+.inspection-start-card .card-icon {
+    color: var(--accent-color);
+}
+
+.inspection-start-card h3 {
+    color: var(--primary-color);
+    /* Keep title orange for emphasis */
+}
+
+/* The primary action button within the inspection-start-card */
+.inspection-start-card .action-btn.primary-action {
+    background-color: var(--primary-color);
+    /* Primary orange for this button */
+    color: var(--text-color-light);
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    box-shadow: 0 8px 16px rgba(230, 126, 34, 0.3);
+}
+
+.inspection-start-card .action-btn.primary-action:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(243, 156, 18, 0.4);
 }
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-    .sidebar {
-        width: 200px;
-        /* Narrower sidebar */
+    .main-header {
+        padding: 0.8rem 1.5rem;
     }
 
     h2 {
-        font-size: 1.5rem;
-        /* Smaller title on wider screens */
+        font-size: 1.7rem;
     }
 
-    .nav-btn {
-        font-size: 16px;
-        padding: 10px 12px;
+    .moto-text {
+        font-size: 0.9rem;
     }
 
-    .content {
-        padding: 20px;
+    .title-icon,
+    .profile-icon {
+        font-size: 1.8rem;
     }
 
-    h1 {
-        font-size: 1.75rem;
+    .main-content-area {
+        padding-top: 65px;
     }
 
-    .action-btn {
-        width: auto;
-        /* Let buttons size themselves */
-        max-width: 200px;
+    .dashboard-title {
+        font-size: 2.2rem;
+    }
+
+    .cards-container {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .card {
+        padding: 25px;
+    }
+
+    .card-icon {
+        font-size: 2.5rem;
+    }
+
+    .card h3 {
+        font-size: 1.3rem;
+    }
+
+    .action-btn,
+    .card-action-btn {
+        padding: 10px 20px;
+        font-size: 0.95rem;
     }
 }
 
 @media (max-width: 768px) {
-    header {
+    .main-header {
         flex-direction: column;
+        height: auto;
         padding: 1rem;
+        align-items: center;
     }
 
-    .header-content {
-        gap: 0.5rem;
+    .header-left,
+    .header-center,
+    .header-right {
+        width: 100%;
+        text-align: center;
         margin-bottom: 0.5rem;
     }
 
+    .header-center {
+        order: 1;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .header-left {
+        order: 0;
+        justify-content: center;
+        /* Center the logo/title group */
+        gap: 0.5rem;
+        margin-bottom: 5px;
+    }
+
+    .header-right {
+        order: 2;
+        margin-top: 0.5rem;
+        position: static;
+        /* Reset absolute positioning for mobile */
+        transform: none;
+        display: flex;
+        /* Ensure it's a flex container */
+        justify-content: center;
+        /* Center profile icon on mobile */
+    }
+
     .title-icon {
-        width: 36px;
-        height: 36px;
+        width: 40px;
+        height: 40px;
     }
 
     h2 {
-        font-size: 1.6rem;
+        font-size: 1.8rem;
     }
 
     .moto-text {
-        font-size: 0.85rem;
-        margin-top: 0.3rem;
+        font-size: 0.9rem;
+        margin-left: 0;
     }
 
-    .profile-container {
-        position: static;
-        margin-left: auto;
-        /* Push to right */
-        padding-left: 15px;
-        /* Space from previous element */
+    .main-content-area {
+        padding-top: 0;
     }
 
-    .profile-icon {
-        font-size: 1.5rem;
+    .content-wrapper {
+        padding: 30px 15px;
     }
 
-    .dropdown-menu {
-        right: 15px;
-        /* Adjust dropdown position */
+    .dashboard-title {
+        font-size: 2rem;
+        margin-bottom: 30px;
     }
 
-    .container {
-        flex-direction: column;
+    .animated-logo {
+        max-width: 250px;
+        opacity: 0.15;
     }
 
-    .sidebar {
-        width: 100%;
-        height: auto;
-        padding: 15px;
+    .cards-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
     }
 
-    .sidebar-header {
-        margin-bottom: 15px;
-        padding-bottom: 10px;
+    .card {
+        padding: 20px;
     }
 
-    .sidebar h2 {
-        font-size: 20px;
+    .card-icon {
+        font-size: 2rem;
     }
 
-    .nav-btn {
-        font-size: 16px;
-        padding: 10px 10px;
+    .card h3 {
+        font-size: 1.2rem;
     }
 
-    .content {
-        padding: 20px 15px;
-    }
-
-    h1 {
-        font-size: 1.75rem;
-    }
-
-    .content p {
+    .action-btn,
+    .card-action-btn {
+        padding: 12px 20px;
         font-size: 1rem;
-    }
-
-    .inspection-actions {
-        margin-top: 25px;
-        padding-top: 15px;
-    }
-
-    .inspection-actions h3 {
-        font-size: 1.25rem;
-    }
-
-    .action-btn {
-        width: 100%;
+        width: 80%;
         max-width: none;
-        /* Remove max-width on mobile */
-        font-size: 14px;
-        padding: 12px;
     }
 }

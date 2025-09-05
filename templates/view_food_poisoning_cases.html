@@ -7,11 +7,13 @@
     <title>Food Poisoning Reports</title>
     <!-- Using the clean table styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/view_cases.css') }}">
-    <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <header class="header">
+    <header class=" header">
         <div class="header-content">
             <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Icon" class="title-icon">
             <h1>SafeServe</h1>
@@ -61,17 +63,15 @@
                     }
 
                     data.forEach(caseItem => {
-                        // *** THE FIX IS HERE ***
-                        // The link for the "Update" button is now correctly generated with the unique case_id for each report.
                         const row = `
                             <tr>
-                                <td>${caseItem.case_id}</td>
-                                <td>${caseItem.hotel_id}</td>
-                                <td>${new Date(caseItem.report_date).toLocaleDateString()}</td>
-                                <td>${caseItem.symptoms}</td>
-                                <td>${caseItem.investigation_status}</td>
-                                <td>${caseItem.conclusion || 'N/A'}</td>
-                                <td>
+                                <td data-label="Case ID">${caseItem.case_id}</td>
+                                <td data-label="Hotel ID">${caseItem.hotel_id}</td>
+                                <td data-label="Report Date">${new Date(caseItem.report_date).toLocaleDateString()}</td>
+                                <td data-label="Symptoms">${caseItem.symptoms}</td>
+                                <td data-label="Status">${caseItem.investigation_status}</td>
+                                <td data-label="Conclusion">${caseItem.conclusion || 'N/A'}</td>
+                                <td data-label="Action">
                                     <a href="/update_case/${caseItem.case_id}" class="update-btn">Update</a>
                                 </td>
                             </tr>

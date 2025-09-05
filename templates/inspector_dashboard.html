@@ -4,109 +4,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inspector Dashboard</title>
+    <title>SafeServe Inspector Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashbo.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <header>
-        <div class="header-content">
+    <header class="main-header">
+        <div class="header-left-content"> <!-- Contains logo and title -->
             <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Icon" class="title-icon">
             <h2>SafeServe</h2>
         </div>
-        <p class="moto-text">Your trusted partner for Safe and Quality Dining Experiences</p>
-        <div class="profile-container">
-            <i class="fas fa-user profile-icon"></i>
-            <div class="dropdown-menu">
-                <ul>
-                    <li><a href="/">Logout</a></li>
-                </ul>
+        <div class="header-center-content"> <!-- Contains subtitle -->
+            <p class="moto-text">Your trusted partner for Safe and Quality Dining Experiences</p>
+        </div>
+        <div class="header-right-content"> <!-- Contains profile icon and dropdown -->
+            <div class="profile-container">
+                <i class="fas fa-user profile-icon"></i>
+                <div class="dropdown-menu">
+                    <ul>
+                        <li><a href="/">Logout</a></li> <!-- This link will trigger logout -->
+                    </ul>
+                </div>
             </div>
         </div>
     </header>
 
-    <div class="container">
-        <nav class="sidebar">
-            <div class="sidebar-header">
-                <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Icon"
-                    class="sidebar-icon">
-                <h2>Inspector Dashboard</h2>
-            </div>
-            <ul>
-                <li><button class="nav-btn" onclick="navigate('Inspection History')">Inspection History</button></li>
-                <li><button class="nav-btn" onclick="navigate('Pending Inspections')">Pending Inspections</button></li>
-                <!-- ADDED A NEW BUTTON TO VIEW CASES -->
-                <li><button class="nav-btn" id="viewCasesButton">View Food Poisoning Cases</button></li>
-                <li><button class="nav-btn" id="addHotelButton">Add Hotels</button></li>
-            </ul>
-        </nav>
+    <main class="main-content-area">
+        <div class="animated-background">
+            <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Logo" class="animated-logo">
+        </div>
 
-        <main class="content">
-            <div id="main-content">
-                <h1>Welcome to the SafeServe Food Inspector Dashboard!</h1>
-                <p>Select an option from the sidebar to get started.</p>
-            </div>
+        <div class="content-wrapper">
+            <h1 class="dashboard-title">Welcome to the SafeServe Food Inspector Dashboard!</h1>
 
-            <div class="inspection-actions">
-                <h3>Inspection Actions</h3>
-                <button class="action-btn" id="startInspectionBtn">Start New Inspection</button>
+            <div class="cards-container">
+                <!-- Cards with unified styling -->
+                <div class="card inspection-start-card" id="viewCasesCard">
+                    <i class="fas fa-exclamation-triangle card-icon"></i>
+                    <h3>View Food Poisoning Cases</h3>
+                    <p>Review recent food poisoning reports and their statuses.</p>
+                    <button class="card-action-btn">View Cases</button>
+                </div>
+
+                <div class="card inspection-start-card" id="addHotelCard">
+                    <i class="fas fa-hotel card-icon"></i>
+                    <h3>Add New Hotels</h3>
+                    <p>Register new establishments for inspection.</p>
+                    <button class="card-action-btn">Add Hotel</button>
+                </div>
+
+                <div class="card inspection-start-card">
+                    <i class="fas fa-camera card-icon"></i>
+                    <h3>Start New Inspection</h3>
+                    <p>Initiate a new food safety inspection.</p>
+                    <button class="action-btn primary-action" id="startInspectionBtn">Start Inspection</button>
+                </div>
             </div>
-        </main>
-    </div>
+        </div>
+    </main>
 
     <script>
-        // Handle the navigation for "Start New Inspection" button
-        document.getElementById('startInspectionBtn').addEventListener('click', function () {
-            window.location.href = '/start_inspection_page';
-        });
+        document.addEventListener('DOMContentLoaded', function () {
+            // Handle navigation for cards
+            document.getElementById('viewCasesCard').addEventListener('click', function () {
+                window.location.href = '/view_food_poisoning_cases';
+            });
+            document.getElementById('addHotelCard').addEventListener('click', function () {
+                window.location.href = '/add_hotel';
+            });
+            document.getElementById('startInspectionBtn').addEventListener('click', function () {
+                window.location.href = '/start_inspection_page';
+            });
 
-        // Handle the navigation for "Add Hotels" button in the sidebar
-        document.getElementById('addHotelButton').addEventListener('click', function () {
-            window.location.href = '/add_hotel';
-        });
+            // --- Profile Dropdown Script ---
+            const profileContainer = document.querySelector('.profile-container');
+            const dropdownMenu = document.querySelector('.dropdown-menu');
 
-        // ADDED: Handle navigation for the new "View Food Poisoning Cases" button
-        document.getElementById('viewCasesButton').addEventListener('click', function () {
-            window.location.href = '/view_food_poisoning_cases';
-        });
+            if (profileContainer && dropdownMenu) {
+                profileContainer.addEventListener('click', function (event) {
+                    event.stopPropagation(); // Prevent closing when clicking on the icon itself
+                    dropdownMenu.classList.toggle('show');
+                });
 
-        // Handle the navigation for the "Logout" button
-        document.getElementById('logoutButton').addEventListener('click', function () {
-            window.location.href = '/inspector_login_page';
-        });
-
-        function navigate(option) {
-            if (option === 'Inspection History') {
-                window.location.href = '/inspection_history';
-            } else if (option === 'Pending Inspections') {
-                window.location.href = '/pending_inspections';
+                window.addEventListener('click', function (event) {
+                    // Close dropdown if click is outside the profile container
+                    if (!profileContainer.contains(event.target)) {
+                        if (dropdownMenu.classList.contains('show')) {
+                            dropdownMenu.classList.remove('show');
+                        }
+                    }
+                });
             } else {
-                alert('Navigating to: ' + option);
+                console.error("Profile container or dropdown menu element not found.");
             }
-        }
-
-        // --- START: New script for click-based dropdown ---
-        const profileContainer = document.querySelector('.profile-container');
-        const dropdownMenu = document.querySelector('.dropdown-menu');
-
-        profileContainer.addEventListener('click', function (event) {
-            // This stops the window click event from firing immediately
-            event.stopPropagation();
-            dropdownMenu.classList.toggle('show');
+            // --- End Profile Dropdown Script ---
         });
-
-        // Close the dropdown if the user clicks anywhere else on the page
-        window.addEventListener('click', function (event) {
-            // Check if the click is outside the profile container
-            if (!profileContainer.contains(event.target)) {
-                if (dropdownMenu.classList.contains('show')) {
-                    dropdownMenu.classList.remove('show');
-                }
-            }
-        });
-        // --- END: New script ---
     </script>
 </body>
 
