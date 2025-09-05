@@ -10,7 +10,6 @@
 </head>
 
 <body>
-    <!-- Header Section -->
     <header class="header">
         <div class="title-container">
             <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Icon" class="title-icon">
@@ -19,16 +18,15 @@
         <p class="caption">Your Trusted Partner for Safe and Quality Dining Experiences</p>
     </header>
 
-    <!-- Navigation Bar -->
     <nav class="navigation">
         <ul>
             <li><a href="/home">Home</a></li>
             <li><a href="/submit_feedback_page">Submit Feedback</a></li>
             <li><a href="/report_food_poisoning_page">Report Food Poisoning</a></li>
+            <li><a href="/my_reports_page">My Reported Cases</a></li>
         </ul>
     </nav>
 
-    <!-- Updated Form to Report Food Poisoning -->
     <section class="report-section">
         <h2 class="submit-feedback-heading">Report a Food Poisoning Incident</h2>
         <div class="feedback-form">
@@ -37,23 +35,18 @@
                     <label for="hotel-id">Hotel ID</label>
                     <input type="text" id="hotel-id" name="hotel_id" required>
                 </div>
-
                 <div class="form-group">
                     <label for="report-date">Date of Incident</label>
                     <input type="date" id="report-date" name="report_date" required>
                 </div>
-
-                <!-- ADDED THIS FIELD BACK -->
                 <div class="form-group">
                     <label for="affected-people">Number of People Affected</label>
-                    <input type="number" id="affected-people" name="number_of_people_affected" min="1" required>
+                    <input type="number" id="affected-people" name="number_of_people_affected" required>
                 </div>
-
                 <div class="form-group">
                     <label for="symptoms">Describe Your Symptoms</label>
                     <textarea id="symptoms" name="symptoms" rows="4" required></textarea>
                 </div>
-
                 <button type="submit" class="submit-btn">Submit Report</button>
             </form>
         </div>
@@ -63,16 +56,26 @@
         document.getElementById('report-form').addEventListener('submit', function (event) {
             event.preventDefault();
 
-            // Collect the updated form data
+            // *** THE FIX IS HERE (PART 1) ***
+            // Get the logged-in customer's ID from session storage.
+            const customerId = sessionStorage.getItem('customer_id');
+
+            if (!customerId) {
+                alert('Could not find your user ID. Please log in again to submit a report.');
+                return;
+            }
+
+            // Collect the form data
             const formData = {
                 hotel_id: document.getElementById('hotel-id').value,
                 report_date: document.getElementById('report-date').value,
-                // ADDED THIS LINE TO COLLECT THE NEW DATA
                 number_of_people_affected: document.getElementById('affected-people').value,
                 symptoms: document.getElementById('symptoms').value,
+                // *** THE FIX IS HERE (PART 2) ***
+                // Add the customer's ID to the data being sent.
+                customer_id: customerId
             };
 
-            // Send data to the backend
             fetch('/food_poisoning_cases', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

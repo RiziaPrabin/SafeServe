@@ -154,6 +154,10 @@ h2 {
     background-color: #f1f1f1;
 }
 
+.dropdown-menu.show {
+    display: block;
+}
+
 /* Show dropdown on hover */
 .profile-container:hover .dropdown-menu {
     display: block;

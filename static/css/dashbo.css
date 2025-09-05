@@ -132,9 +132,16 @@ h2 {
     background-color: #f1f1f1;
 }
 
-.profile-container:hover .dropdown-menu {
+/* This class will be toggled by JavaScript to show the menu */
+.dropdown-menu.show {
     display: block;
 }
+
+/* REMOVED: The problematic hover rule has been deleted.
+   .profile-container:hover .dropdown-menu {
+       display: block;
+   }
+*/
 
 /* Main Layout: Sidebar + Content */
 .container {

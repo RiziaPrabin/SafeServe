@@ -18,11 +18,10 @@
         </div>
         <p class="moto-text">Your trusted partner for Safe and Quality Dining Experiences</p>
         <div class="profile-container">
-            <i class="fas fa-user profile-icon"></i> <!-- Added 'profile-icon' class here -->
+            <i class="fas fa-user profile-icon"></i>
             <div class="dropdown-menu">
                 <ul>
-                    <li><a href="/edit_profile_page">Edit Profile</a></li>
-                    <li><a href="/logout">Logout</a></li>
+                    <li><a href="/">Logout</a></li>
                 </ul>
             </div>
         </div>
@@ -45,36 +44,58 @@
             <p class="card-description">Loading data...</p>
         </a>
 
+        <a href="/food_poisoning_page" class="card">
+            <div class="card-header">
+                <span class="card-icon">⚠️</span>
+                <h3>Food Poisoning Cases</h3>
+            </div>
+            <p class="card-description">Loading data...</p>
+        </a>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            // Assumes you have API endpoints like /inspections_summary, /feedback_summary, etc.
+            const hotelId = sessionStorage.getItem('hotel_id');
 
-            // Fetch and display inspections data
-            fetch('/inspections_summary')
-                .then(response => response.json())
-                .then(data => {
-                    const inspectionsCard = document.querySelector('a[href="/inspections_page"] .card-description');
-                    inspectionsCard.innerHTML = `<p>Inspections Passed: ${data.passed}</p><p>Upcoming Inspections: ${data.upcoming}</p>`;
-                }).catch(error => {
-                    console.error('Error fetching inspections:', error);
-                    document.querySelector('a[href="/inspections_page"] .card-description').textContent = 'Error loading data.';
+            if (!hotelId) {
+                document.querySelectorAll('.card-description').forEach(el => {
+                    el.textContent = 'Please log in to see data.';
                 });
+            } else {
+                // Fetch and display inspections data
+                fetch(`/api/inspections_summary?hotel_id=${hotelId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const inspectionsCard = document.querySelector('a[href="/inspections_page"] .card-description');
+                        inspectionsCard.innerHTML = `<p><strong>Passed:</strong> ${data.passed}</p><p><strong>Failed / Needs Improvement:</strong> ${data.failed}</p>`;
+                    }).catch(error => {
+                        console.error('Error fetching inspections:', error);
+                        document.querySelector('a[href="/inspections_page"] .card-description').textContent = 'Error loading data.';
+                    });
 
-            // Fetch and display feedback data
-            fetch('/feedback_summary')
-                .then(response => response.json())
-                .then(data => {
-                    const feedbackCard = document.querySelector('a[href="/feedback_page"] .card-description');
-                    feedbackCard.innerHTML = `<p>Positive Feedback: ${data.positive}</p><p>Negative Feedback: ${data.negative}</p>`;
-                }).catch(error => {
-                    console.error('Error fetching feedback:', error);
-                    document.querySelector('a[href="/feedback_page"] .card-description').textContent = 'Error loading data.';
-                });
+                // (You can add similar fetch calls for feedback and food poisoning summaries here)
+            }
 
-            // Fetch and display food poisoning data
+            // --- START: New script for click-based dropdown ---
+            const profileContainer = document.querySelector('.profile-container');
+            const dropdownMenu = document.querySelector('.dropdown-menu');
 
+            profileContainer.addEventListener('click', function (event) {
+                // This stops the window click event from firing immediately
+                event.stopPropagation();
+                dropdownMenu.classList.toggle('show');
+            });
+
+            // Close the dropdown if the user clicks anywhere else on the page
+            window.addEventListener('click', function (event) {
+                // Check if the click is outside the profile container
+                if (!profileContainer.contains(event.target)) {
+                    if (dropdownMenu.classList.contains('show')) {
+                        dropdownMenu.classList.remove('show');
+                    }
+                }
+            });
+            // --- END: New script ---
         });
     </script>
 </body>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Reported Cases</title>
+    <!-- Reusing the clean table styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/view_cases.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-content">
+            <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Icon" class="title-icon">
+            <h1>SafeServe</h1>
+        </div>
+        <p class="moto-text">Your Trusted Partner for Safe and Quality Dining Experiences</p>
+    </header>
+
+    <div class="main-content">
+        <div class="table-container">
+            <div class="table-header">
+                <h2>My Reported Cases</h2>
+                <a href="/home" class="back-link">&larr; Back to Home</a>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Hotel ID</th>
+                        <th>Report Date</th>
+                        <th>Symptoms</th>
+                        <th>Status</th>
+                        <th>Inspector's Conclusion</th>
+                    </tr>
+                </thead>
+                <tbody id="my-reports-tbody">
+                    <!-- Data will be inserted here by JavaScript -->
+                    <tr>
+                        <td colspan="5" style="text-align:center;">Loading your reports...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Step 1: Get the customer's ID from the browser's session storage
+            const customerId = sessionStorage.getItem('customer_id');
+            const tbody = document.getElementById('my-reports-tbody');
+
+            // Step 2: If no ID is found, show an error. This means they are not logged in correctly.
+            if (!customerId) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Could not find your User ID. Please log in again.</td></tr>';
+                return;
+            }
+
+            // Step 3: Fetch the reports for this specific customer from the backend
+            fetch(`/api/my_reports?customer_id=${customerId}`)
+                .then(response => response.json())
+                .then(data => {
+                    tbody.innerHTML = ''; // Clear the "Loading..." message
+
+                    // Step 4: If the customer has not submitted any reports, show a message.
+                    if (data.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">You have not reported any cases yet.</td></tr>';
+                        return;
+                    }
+
+                    // Step 5: Loop through each report and create a table row for it.
+                    data.forEach(report => {
+                        const row = `
+                            <tr>
+                                <td>${report.hotel_id}</td>
+                                <td>${new Date(report.report_date).toLocaleDateString()}</td>
+                                <td>${report.symptoms}</td>
+                                <td>${report.investigation_status}</td>
+                                <td>${report.conclusion || 'No conclusion yet.'}</td>
+                            </tr>
+                        `;
+                        tbody.innerHTML += row;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching reports:', error);
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Error loading your reports. Please try again later.</td></tr>';
+                });
+        });
+    </script>
+</body>
+
+</html>

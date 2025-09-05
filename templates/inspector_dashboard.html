@@ -21,8 +21,7 @@
             <i class="fas fa-user profile-icon"></i>
             <div class="dropdown-menu">
                 <ul>
-                    <li><a href="/inspector_profile">Inspector Profile</a></li>
-                    <li><a href="/logout">Logout</a></li>
+                    <li><a href="/">Logout</a></li>
                 </ul>
             </div>
         </div>
@@ -41,7 +40,6 @@
                 <!-- ADDED A NEW BUTTON TO VIEW CASES -->
                 <li><button class="nav-btn" id="viewCasesButton">View Food Poisoning Cases</button></li>
                 <li><button class="nav-btn" id="addHotelButton">Add Hotels</button></li>
-                <li><button class="nav-btn" id="logoutButton">Logout</button></li>
             </ul>
         </nav>
 
@@ -89,7 +87,26 @@
             }
         }
 
+        // --- START: New script for click-based dropdown ---
+        const profileContainer = document.querySelector('.profile-container');
+        const dropdownMenu = document.querySelector('.dropdown-menu');
 
+        profileContainer.addEventListener('click', function (event) {
+            // This stops the window click event from firing immediately
+            event.stopPropagation();
+            dropdownMenu.classList.toggle('show');
+        });
+
+        // Close the dropdown if the user clicks anywhere else on the page
+        window.addEventListener('click', function (event) {
+            // Check if the click is outside the profile container
+            if (!profileContainer.contains(event.target)) {
+                if (dropdownMenu.classList.contains('show')) {
+                    dropdownMenu.classList.remove('show');
+                }
+            }
+        });
+        // --- END: New script ---
     </script>
 </body>
 

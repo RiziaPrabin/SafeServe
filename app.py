@@ -81,6 +81,32 @@ def hotel_signup_page():
     return render_template('hotel_signup.html')
 # -------------------------
 
+# Renders the inspector's form to update a case.
+@app.route('/update_case/<int:case_id>')
+def update_case_page(case_id):
+    try:
+        cursor = db.cursor(dictionary=True)
+        query = "SELECT * FROM food_poisoning_cases WHERE case_id = %s"
+        cursor.execute(query, (case_id,))
+        case = cursor.fetchone()
+        cursor.close()
+        if case:
+            return render_template('update_case.html', case=case)
+        else:
+            return "Case not found", 404
+    except Exception as e:
+        return f"Database error: {str(e)}", 500
+
+# Renders the customer's page to view their own reports.
+@app.route('/my_reports_page')
+def my_reports_page():
+    return render_template('my_reports.html')
+
+# --- END: New Page Rendering Routes ---
+
+
+# --- API Routes ---
+
 @app.route('/customer_login', methods=['POST'])
 def customer_login():
     data = request.json
@@ -94,10 +120,10 @@ def customer_login():
     cursor.close()
 
     if customer and bcrypt.checkpw(password.encode('utf-8'), customer['password'].encode('utf-8')):
-        return jsonify({'message': 'Login successful!'}), 200
+        # MODIFIED: Now returns the customer's ID on successful login
+        return jsonify({'message': 'Login successful!', 'customer_id': customer['id']}), 200
     else:
         return jsonify({'message': 'Invalid credentials!'}), 401
-# --- Inspector API Routes ---
 
 
 
@@ -282,19 +308,21 @@ def get_hotel_feedback():
 def add_food_poisoning_case():
     try:
         data = request.json
+        # MODIFIED: This now gets the customer_id from the form data
+        customer_id = data.get('customer_id') 
+
         query = """
-            INSERT INTO food_poisoning_cases (hotel_id, report_date, symptoms, number_of_people_affected, investigation_status, conclusion) 
-            VALUES (%s, %s, %s, %s, %s, %s)
+            INSERT INTO food_poisoning_cases (hotel_id, report_date, symptoms, number_of_people_affected, investigation_status, conclusion, customer_id) 
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
         """
-        # MODIFIED: This now gets the 'number_of_people_affected' directly from the form data
-        # sent by the customer's JavaScript.
         values = (
             data.get('hotel_id'), 
             data.get('report_date'), 
             data.get('symptoms'),
-            data.get('number_of_people_affected'), # This now comes from the customer's input
-            'Pending', # Default status for a new report
-            ''         # Default conclusion is empty until an inspector reviews it
+            data.get('number_of_people_affected'),
+            'Pending', 
+            '',
+            customer_id # Added customer_id to the insert
         )
         cursor = db.cursor()
         cursor.execute(query, values)
@@ -303,7 +331,6 @@ def add_food_poisoning_case():
         return jsonify({'message': 'Report submitted successfully. An inspector will review it shortly.'}), 201
     except Exception as e:
         db.rollback()
-        # It's good practice to log the error for debugging
         print(f"Database error: {str(e)}")
         return jsonify({'message': 'An error occurred while submitting the report.'}), 500
 
@@ -432,6 +459,41 @@ def get_hotel_inspections():
         print(f"Database error in get_hotel_inspections: {str(e)}")
         return jsonify({"error": "Database error"}), 500
 
+# Handles the inspector's update submission
+@app.route('/api/update_case/<int:case_id>', methods=['POST'])
+def update_case(case_id):
+    try:
+        data = request.json
+        status = data.get('investigation_status')
+        conclusion = data.get('conclusion')
+        
+        cursor = db.cursor()
+        query = "UPDATE food_poisoning_cases SET investigation_status = %s, conclusion = %s WHERE case_id = %s"
+        cursor.execute(query, (status, conclusion, case_id))
+        db.commit()
+        cursor.close()
+        
+        return jsonify({'message': 'Case updated successfully!'})
+    except Exception as e:
+        db.rollback()
+        return jsonify({'message': f'Database error: {str(e)}'}), 500
+
+# Fetches the reports submitted by a specific customer
+@app.route('/api/my_reports', methods=['GET'])
+def get_my_reports():
+    customer_id = request.args.get('customer_id')
+    if not customer_id:
+        return jsonify({'message': 'Customer ID is required'}), 400
+    
+    try:
+        cursor = db.cursor(dictionary=True)
+        query = "SELECT * FROM food_poisoning_cases WHERE customer_id = %s ORDER BY report_date DESC"
+        cursor.execute(query, (customer_id,))
+        reports = cursor.fetchall()
+        cursor.close()
+        return jsonify(reports)
+    except Exception as e:
+        return jsonify({'message': f'Database error: {str(e)}'}), 500
 # --- END: New routes ---
 
 

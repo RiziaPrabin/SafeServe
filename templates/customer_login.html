@@ -32,6 +32,8 @@
     <footer>
         <p>&copy; 2025 SafeServe. All Rights Reserved.</p>
     </footer>
+
+    <!-- CORRECTED SCRIPT: The duplicate fetch call has been removed. -->
     <script>
         document.getElementById("login-form").addEventListener("submit", function (event) {
             event.preventDefault();
@@ -45,7 +47,8 @@
                 return;
             }
 
-            fetch('http://127.0.0.1:5000/customer_login', {
+            // This is the single, correct fetch call.
+            fetch('/customer_login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -58,10 +61,13 @@
                 .then(response => response.json().then(data => ({ ok: response.ok, data })))
                 .then(({ ok, data }) => {
                     if (ok) {
-                        // If login is successful, redirect to the home page route
+                        // *** THIS IS THE CRUCIAL FIX ***
+                        // We save the customer's ID to the browser's session storage.
+                        sessionStorage.setItem('customer_id', data.customer_id);
+
+                        // Redirect to the home page AFTER saving the ID.
                         window.location.href = "/home";
                     } else {
-                        // Display error message from the server
                         errorMessage.textContent = data.message || "Login failed.";
                     }
                 })

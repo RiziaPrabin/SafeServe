@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Case</title>
+    <!-- Reusing your clean table styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/view_cases.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-content">
+            <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Icon" class="title-icon">
+            <h1>SafeServe</h1>
+        </div>
+        <p class="moto-text">Your Trusted Partner for Safe and Quality Dining Experiences</p>
+    </header>
+
+    <div class="main-content">
+        <div class="table-container">
+            <div class="table-header">
+                <h2>Update Case #${case.case_id}</h2>
+                <a href="/view_food_poisoning_cases" class="back-link">&larr; Back to All Cases</a>
+            </div>
+            <!-- The form is pre-filled with data passed from your Flask app -->
+            <form id="update-case-form" class="update-form" data-case-id="{{ case.case_id }}">
+                <div class="form-group">
+                    <label for="investigation_status">Investigation Status</label>
+                    <select id="investigation_status" name="investigation_status">
+                        <option value="Pending" {{ 'selected' if case.investigation_status=='Pending' }}>Pending
+                        </option>
+                        <option value="In Progress" {{ 'selected' if case.investigation_status=='In Progress' }}>In
+                            Progress</option>
+                        <option value="Resolved" {{ 'selected' if case.investigation_status=='Resolved' }}>Resolved
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="conclusion">Conclusion</label>
+                    <textarea id="conclusion" name="conclusion" rows="6">{{ case.conclusion or '' }}</textarea>
+                </div>
+                <button type="submit" class="update-btn">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('update-case-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const caseId = event.target.dataset.caseId;
+            const status = document.getElementById('investigation_status').value;
+            const conclusion = document.getElementById('conclusion').value;
+
+            if (!caseId) {
+                alert('Could not find the Case ID. Please go back and try again.');
+                return;
+            }
+
+            fetch(`/api/update_case/${caseId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    investigation_status: status,
+                    conclusion: conclusion
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    window.location.href = '/view_food_poisoning_cases';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+        });
+    </script>
+</body>
+
+</html>
