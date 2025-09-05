@@ -61,8 +61,7 @@ To run this project locally, please follow these steps:
 **2. Clone the Repository:**
 
 
-git clone <your-repository-url>
-cd <your-project-directory>
+git clone https://github.com/RiziaPrabin/SafeServe.git
 
 
 **3. Set Up the Database:**
