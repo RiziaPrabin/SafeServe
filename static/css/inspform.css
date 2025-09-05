@@ -1,0 +1,497 @@
+/* Base Styles and Variables */
+:root {
+    --primary-color: #e67e22;
+    /* Orangish-red - Used for SafeServe title, page titles, buttons */
+    --secondary-color: #1a1a1a;
+    /* Very dark gray/black - Used for main background, header background, animated background */
+    --accent-color: #f39c12;
+    /* Brighter orange - Used for highlights, icons, hover effects */
+    --text-color-dark: #333;
+    /* Keep this for specific elements if needed, but most will be light */
+    --text-color-light: #ecf0f1;
+    /* Light text for dark backgrounds - THIS IS WHAT WE'LL USE FOR MOST TEXT */
+    --text-color-muted: #a0a0a0;
+    /* Muted text, for subtitles etc. */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--secondary-color);
+    /* <-- This correctly sets the main background to black */
+    color: var(--text-color-light);
+    /* Default text color to light for most elements */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Header Styling */
+.main-header {
+    background: rgba(26, 26, 26, 0.9);
+    /* Dark header background */
+    padding: 0.5rem 2rem;
+    box-shadow: var(--shadow-md);
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    height: 75px;
+}
+
+.header-left-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.title-icon {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px hsla(30, 80%, 50%, 0.5));
+    /* Orange glow */
+}
+
+h2 {
+    /* SafeServe title in header */
+    font-size: 2rem;
+    color: var(--primary-color);
+    /* Orange title - Already set */
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin: 0;
+}
+
+/* Container for the subtitle */
+.header-center-content {
+    flex-grow: 1;
+    text-align: center;
+    margin: 0 20px;
+}
+
+.moto-text {
+    /* Subtitle in header */
+    color: var(--text-color-light);
+    /* <-- Ensure subtitle text is light */
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* Profile Icon */
+.header-right-content {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+}
+
+/* Profile Icon and Dropdown */
+.profile-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.profile-icon {
+    font-size: 2rem;
+    color: var(--accent-color);
+    /* Orange for profile icon */
+    transition: color 0.3s ease;
+}
+
+.profile-icon:hover {
+    color: var(--primary-color);
+    /* Deeper orange on hover */
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #2a2a2a;
+    box-shadow: var(--shadow-lg);
+    border-radius: 10px;
+    z-index: 100;
+    margin-top: 0.75rem;
+    min-width: 200px;
+}
+
+.dropdown-menu ul li {
+    padding: 0.85rem 1.2rem;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-menu ul li a {
+    text-decoration: none;
+    color: var(--text-color-light);
+    /* Light text in dropdown */
+    display: block;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.dropdown-menu ul li:hover {
+    background-color: #3a3a3a;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+/* Main Content Area */
+.main-content-area {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    /* Align content to the top */
+    padding-top: 75px;
+    /* Header height */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Animated Background for Logo */
+.animated-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--secondary-color);
+    /* Black background */
+    z-index: 0;
+}
+
+.animated-logo {
+    width: 50%;
+    max-width: 400px;
+    height: auto;
+    opacity: 0.25;
+    animation: rotateY360 15s linear infinite;
+    filter: drop-shadow(0 0 25px hsla(30, 80%, 60%, 0.5));
+}
+
+@keyframes rotateY360 {
+    from {
+        transform: rotateY(0deg);
+    }
+
+    to {
+        transform: rotateY(360deg);
+    }
+}
+
+/* Content Wrapper for page specific content */
+.content-wrapper {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1100px;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+/* Page Header specific to Inspection Form Page */
+.page-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.page-header-content h2 {
+    /* Styling for "Inspection Details" title */
+    font-size: 2rem;
+    color: var(--primary-color);
+    /* Orange for the title */
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Back to Dashboard Link Styling */
+.back-link {
+    color: var(--primary-color);
+    /* Changed to primary orange */
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+    font-size: 1rem;
+}
+
+.back-link:hover {
+    color: var(--accent-color);
+    /* Brighter orange on hover */
+    text-decoration: underline;
+}
+
+/* Form Container for Inspection Form */
+.form-container {
+    width: 100%;
+    max-width: 500px;
+    /* Adjusted max-width for a more compact form */
+    background: rgba(40, 30, 20, 0.7);
+    /* Darker, transparent card background */
+    border-radius: 16px;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
+    padding: 40px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.form-container:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Form Group Styling */
+.form-group {
+    margin-bottom: 25px;
+    width: 100%;
+}
+
+/* Label styles */
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-color-light);
+    /* Light text for labels */
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+/* Input, Select, and Textarea styles */
+input[type="date"],
+select,
+textarea {
+    /* Target date input, select, and textarea */
+    width: 100%;
+    padding: 1.2rem;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    /* Subtle border matching card style */
+    border-radius: 8px;
+    font-size: 1.2rem;
+    color: var(--text-color-light);
+    /* Light text for inputs */
+    background-color: rgba(40, 30, 20, 0.7);
+    /* Dark card background for inputs */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+/* Focus styles for inputs, select, and textarea */
+input[type="date"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    /* Orange border on focus */
+    box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.5);
+    /* Orange focus ring */
+    background-color: rgba(40, 30, 20, 0.85);
+    /* Slightly darker on focus */
+}
+
+/* Select specific styles */
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23f39c12' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    /* Orange arrow */
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1em;
+    padding-right: 2.5rem;
+}
+
+/* Button styles */
+.submit-btn {
+    width: 100%;
+    padding: 1.1rem;
+    background-color: var(--primary-color);
+    /* Primary orange for the button */
+    color: var(--text-color-light);
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 8px 16px rgba(230, 126, 34, 0.3);
+}
+
+.submit-btn:hover {
+    background-color: var(--accent-color);
+    /* Brighter orange on hover */
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(243, 156, 18, 0.4);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+    .main-header {
+        padding: 0.8rem 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.7rem;
+    }
+
+    /* Adjusted for header title */
+    .moto-text {
+        font-size: 0.9rem;
+    }
+
+    .title-icon,
+    .profile-icon {
+        font-size: 1.8rem;
+    }
+
+    .main-content-area {
+        padding-top: 65px;
+    }
+
+    .page-header-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .page-header-content h2 {
+        font-size: 1.5rem;
+    }
+
+    /* Adjusted for page title */
+    .form-container {
+        padding: 25px;
+        max-width: 90%;
+    }
+
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+        /* Target all form fields for size */
+        padding: 0.8rem;
+        font-size: 1rem;
+    }
+
+    .submit-btn {
+        padding: 0.875rem;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-header {
+        flex-direction: column;
+        height: auto;
+        padding: 1rem;
+        align-items: center;
+    }
+
+    .header-left-content,
+    .header-center-content,
+    .header-right-content {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .header-center-content {
+        order: 1;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .header-left-content {
+        order: 0;
+        justify-content: center;
+        /* Center the logo/title group */
+        gap: 0.5rem;
+        margin-bottom: 5px;
+    }
+
+    .header-right-content {
+        order: 2;
+        margin-top: 0.5rem;
+        position: static;
+        /* Reset absolute positioning for mobile */
+        transform: none;
+        display: flex;
+        /* Ensure it's a flex container */
+        justify-content: center;
+        /* Center profile icon on mobile */
+    }
+
+    .title-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+
+    /* Adjusted for header title */
+    .moto-text {
+        font-size: 0.9rem;
+        margin-left: 0;
+    }
+
+    .main-content-area {
+        padding-top: 0;
+    }
+
+    .content-wrapper {
+        padding: 30px 15px;
+    }
+
+    .animated-logo {
+        max-width: 250px;
+        opacity: 0.15;
+    }
+
+    /* Form specific responsive adjustments */
+    .form-container {
+        padding: 25px 15px;
+        max-width: 95%;
+    }
+
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+        /* Target all form fields for size */
+        padding: 0.8rem;
+        font-size: 1rem;
+    }
+
+    .submit-btn {
+        padding: 0.875rem;
+        font-size: 0.95rem;
+    }
+}
