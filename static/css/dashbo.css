@@ -215,11 +215,11 @@ h2 {
 }
 
 .dashboard-title {
-    color: var(--text-color-light);
+    color: #f9efe7;
     font-size: 2.5rem;
     font-weight: 700;
     letter-spacing: -0.04em;
-    margin-bottom: 50px;
+    margin-bottom: 150px;
 }
 
 /* Card Layout */
@@ -489,6 +489,7 @@ h2 {
     /* Adjust padding for smaller header */
     .content-wrapper {
         padding: 1.5rem 15px;
+
     }
 
     .page-header-content {
