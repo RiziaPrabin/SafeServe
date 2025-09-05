@@ -4,32 +4,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Start New Inspection</title>
-    <!-- Link to the new stylesheet -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/start_inspection.css') }}">
+    <title>SafeServe Start New Inspection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/startinsp.css') }}">
+    <!-- Linking to the main dashboard CSS -->
     <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <header>
-        <div class="header-content">
+    <header class="main-header">
+        <div class="header-left-content"> <!-- Contains logo and title -->
             <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Icon" class="title-icon">
-            <h2>Start New Inspection</h2>
+            <h2>SafeServe</h2>
         </div>
-        <p class="moto-text">
-            <a href="/inspector_dashboard">&larr; Back to Dashboard</a>
-        </p>
+        <div class="header-center-content"> <!-- Contains subtitle -->
+            <p class="moto-text">Your trusted partner for Safe and Quality Dining Experiences</p>
+        </div>
+
     </header>
 
-    <div class="form-container">
-        <form id="start-inspection-form">
-            <div class="form-group">
-                <label for="hotel_id">Enter Hotel ID to Inspect</label>
-                <input type="number" id="hotel_id" name="hotel_id" placeholder="e.g., 101" required>
+    <main class="main-content-area">
+        <div class="animated-background">
+            <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Logo" class="animated-logo">
+        </div>
+
+        <div class="content-wrapper">
+            <div class="page-header-content"> <!-- Custom wrapper for page title and back link -->
+                <h2>Start New Inspection</h2>
+                <a href="/inspector_dashboard" class="back-link">&larr; Back to Dashboard</a>
             </div>
-            <button type="submit" class="submit-btn">Proceed to Inspection Form</button>
-        </form>
-    </div>
+
+            <div class="form-container"> <!-- Card-like container for the form -->
+                <form id="start-inspection-form">
+                    <div class="form-group">
+                        <label for="hotel_id">Enter Hotel ID to Inspect</label>
+                        <input type="number" id="hotel_id" name="hotel_id" placeholder="e.g., 101" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Proceed to Inspection Form</button>
+                </form>
+            </div>
+        </div>
+    </main>
 
     <script>
         document.getElementById('start-inspection-form').addEventListener('submit', function (event) {

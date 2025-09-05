@@ -4,53 +4,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Poisoning Reports</title>
-    <!-- Using the clean table styles -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/view_cases.css') }}">
+    <title>SafeServe Food Poisoning Reports</title>
+    <!-- Linking to the updated CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashbo.css') }}">
+    <!-- Linking to the Inspector Dashboard CSS -->
+    <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
+    <!-- Google Fonts for Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
-    <header class=" header">
-        <div class="header-content">
+    <header class="main-header">
+        <div class="header-left-content"> <!-- Contains logo and title -->
             <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Icon" class="title-icon">
-            <h1>SafeServe</h1>
+            <h2>SafeServe</h2>
         </div>
-        <p class="moto-text">Your Trusted Partner for Safe and Quality Dining Experiences</p>
+        <div class="header-center-content"> <!-- Contains subtitle -->
+            <p class="moto-text">Your trusted partner for Safe and Quality Dining Experiences</p>
+        </div>
     </header>
 
-    <div class="main-content">
-        <div class="table-container">
-            <div class="table-header">
+    <main class="main-content-area">
+        <div class="animated-background">
+            <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Logo" class="animated-logo">
+        </div>
+
+        <div class="content-wrapper">
+            <div class="page-header-content"> <!-- Custom wrapper for page title and back link -->
                 <h2>Food Poisoning Reports</h2>
                 <a href="/inspector_dashboard" class="back-link">&larr; Back to Dashboard</a>
             </div>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Case ID</th>
-                        <th>Hotel ID</th>
-                        <th>Report Date</th>
-                        <th>Symptoms</th>
-                        <th>Status</th>
-                        <th>Conclusion</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="cases-tbody">
-                    <!-- Data will be populated here by JavaScript -->
-                    <tr>
-                        <td colspan="7" style="text-align:center;">Loading cases...</td>
-                    </tr>
-                </tbody>
-            </table>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Case ID</th>
+                            <th>Hotel ID</th>
+                            <th>Report Date</th>
+                            <th>Symptoms</th>
+                            <th>Status</th>
+                            <th>Conclusion</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cases-tbody">
+                        <!-- Data will be populated here by JavaScript -->
+                        <tr>
+                            <td colspan="7" style="text-align:center;">Loading cases...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
+    </main>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            // Fetch data for the table
             fetch('/api/food_poisoning_cases')
                 .then(response => response.json())
                 .then(data => {
@@ -81,8 +96,32 @@
                 })
                 .catch(error => {
                     console.error('Error fetching cases:', error);
+                    const tbody = document.getElementById('cases-tbody');
                     tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Error loading data. Please try again.</td></tr>';
                 });
+
+            // --- Profile Dropdown Script (Copied from Inspector Dashboard) ---
+            const profileContainer = document.querySelector('.profile-container');
+            const dropdownMenu = document.querySelector('.dropdown-menu');
+
+            if (profileContainer && dropdownMenu) {
+                profileContainer.addEventListener('click', function (event) {
+                    event.stopPropagation(); // Prevent closing when clicking on the icon itself
+                    dropdownMenu.classList.toggle('show');
+                });
+
+                window.addEventListener('click', function (event) {
+                    // Close dropdown if click is outside the profile container
+                    if (!profileContainer.contains(event.target)) {
+                        if (dropdownMenu.classList.contains('show')) {
+                            dropdownMenu.classList.remove('show');
+                        }
+                    }
+                });
+            } else {
+                console.error("Profile container or dropdown menu element not found.");
+            }
+            // --- End Profile Dropdown Script ---
         });
     </script>
 </body>

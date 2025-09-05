@@ -7,8 +7,9 @@
     --accent-color: #f39c12;
     /* Brighter orange for highlights */
     --text-color-dark: #333;
+    /* Keep this for specific elements if needed, but most will be light */
     --text-color-light: #ecf0f1;
-    /* Light text for dark backgrounds */
+    /* Light text for dark backgrounds - THIS IS WHAT WE'LL USE FOR MOST TEXT */
     --text-color-muted: #a0a0a0;
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -26,6 +27,7 @@ body {
     background-color: var(--secondary-color);
     /* Dark background for the whole page */
     color: var(--text-color-light);
+    /* Default text color to light */
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -66,7 +68,7 @@ h2 {
     /* SafeServe title in header */
     font-size: 2rem;
     color: var(--primary-color);
-    /* Orange title */
+    /* Orange title - This will remain orange */
     font-weight: 700;
     letter-spacing: -0.03em;
     margin: 0;
@@ -84,7 +86,8 @@ h2 {
 
 .moto-text {
     /* Subtitle in header */
-    color: var(--text-color-muted);
+    color: var(--text-color-light);
+    /* <-- Changed to light text */
     font-size: 1rem;
     font-weight: 500;
 }
@@ -139,6 +142,7 @@ h2 {
 .dropdown-menu ul li a {
     text-decoration: none;
     color: var(--text-color-light);
+    /* Light text in dropdown */
     display: block;
     font-weight: 500;
     font-size: 1rem;
@@ -193,8 +197,6 @@ h2 {
     /* Brighter orange glow */
 }
 
-
-
 @keyframes rotateY360 {
     from {
         transform: rotateY(0deg);
@@ -211,29 +213,26 @@ h2 {
     z-index: 1;
     width: 100%;
     max-width: 1100px;
-    /* Use similar width as dashboard for consistency */
     padding: 40px 20px;
     text-align: center;
 }
 
-/* Page Header specific to Add Hotel Page */
+/* Page Header specific to Start Inspection Page */
 .page-header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
     padding-bottom: 15px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .page-header-content h2 {
-    /* Styling for "Add New Hotel" title */
-    font-size: 2rem;
-    /* Larger title */
+    /* Styling for "Start New Inspection" title */
+    font-size: 2.2rem;
     color: var(--primary-color);
     /* Orange for the title */
     font-weight: 700;
-    /* Bolder */
     margin: 0;
 }
 
@@ -254,32 +253,23 @@ h2 {
 }
 
 
-/* Form Container */
+/* Form Container for Start Inspection */
 .form-container {
     width: 100%;
-    max-width: 700px;
-    /* Increased max-width to make form wider */
+    max-width: 500px;
     background: rgba(40, 30, 20, 0.7);
-    /* Darker, transparent card background */
     border-radius: 16px;
-    /* Rounded corners */
     box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
-    /* Deeper shadow */
     padding: 40px;
-    /* Increased padding inside the form container */
     text-align: left;
-    /* Align form elements to the left */
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* Center form elements within the container */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    /* Subtle border */
-    margin-top: auto;
-    /* Push the form container down slightly */
-    margin-left: 150px;
-
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .form-container:hover {
@@ -289,10 +279,8 @@ h2 {
 
 /* Form Group Styling */
 .form-group {
-    margin-bottom: 1.5rem;
-    /* Space between form fields */
+    margin-bottom: 25px;
     width: 100%;
-    /* Make form groups take full width */
 }
 
 /* Label styles */
@@ -302,37 +290,23 @@ label {
     color: var(--text-color-light);
     /* Light text for labels */
     font-weight: 500;
-    font-size: 1rem;
-    /* Slightly larger font */
+    font-size: 1.1rem;
 }
 
-/* Input and select styles */
-input[type="text"],
-input[type="email"],
-input[type="number"],
-input[type="date"],
-select {
+/* Input field style */
+input[type="number"] {
     width: 100%;
-    padding: 1rem;
-    /* Increased padding */
+    padding: 1.2rem;
     border: 2px solid rgba(255, 255, 255, 0.15);
-    /* Subtle border matching card style */
     border-radius: 8px;
-    /* More rounded */
-    font-size: 1.1rem;
-    /* Increased font size for better visibility */
+    font-size: 1.2rem;
     color: var(--text-color-light);
-    /* Light text for inputs */
+    /* <-- SETTING TEXT COLOR TO LIGHT */
     background-color: rgba(40, 30, 20, 0.7);
-    /* Dark card background for inputs */
     transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="number"]:focus,
-input[type="date"]:focus,
-select:focus {
+input[type="number"]:focus {
     outline: none;
     border-color: var(--accent-color);
     /* Orange border on focus */
@@ -342,45 +316,27 @@ select:focus {
     /* Slightly darker on focus */
 }
 
-/* Select specific styles */
-select {
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23f39c12' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    /* Orange arrow */
-    background-repeat: no-repeat;
-    background-position: right 0.75rem center;
-    background-size: 1em;
-    padding-right: 2.5rem;
-}
-
 /* Button styles */
 .submit-btn {
     width: 100%;
     padding: 1.1rem;
-    /* Increased button padding */
     background-color: var(--primary-color);
     /* Primary orange for the button */
     color: var(--text-color-light);
     border: none;
     border-radius: 8px;
-    /* More rounded */
     font-size: 1.1rem;
-    /* Larger font */
     font-weight: 700;
-    /* Bolder */
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
     box-shadow: 0 8px 16px rgba(230, 126, 34, 0.3);
-    /* Orange shadow */
 }
 
 .submit-btn:hover {
     background-color: var(--accent-color);
     /* Brighter orange on hover */
     transform: translateY(-3px);
-    /* Lift effect */
     box-shadow: 0 12px 24px rgba(243, 156, 18, 0.4);
-    /* Brighter orange shadow */
 }
 
 /* Responsive Adjustments */
@@ -406,10 +362,6 @@ select {
         padding-top: 65px;
     }
 
-    .content-wrapper {
-        padding: 30px 15px;
-    }
-
     .page-header-content {
         flex-direction: column;
         align-items: flex-start;
@@ -422,16 +374,12 @@ select {
 
     .form-container {
         padding: 25px;
-        /* Slightly less padding on medium screens */
         max-width: 90%;
     }
 
-    input[type="text"],
-    input[type="email"],
-    input[type="number"],
-    input[type="date"],
-    select {
+    input[type="number"] {
         padding: 0.8rem;
+        font-size: 1rem;
     }
 
     .submit-btn {
@@ -465,7 +413,6 @@ select {
     .header-left-content {
         order: 0;
         justify-content: center;
-        /* Center the logo/title group */
         gap: 0.5rem;
         margin-bottom: 5px;
     }
@@ -474,12 +421,9 @@ select {
         order: 2;
         margin-top: 0.5rem;
         position: static;
-        /* Reset absolute positioning for mobile */
         transform: none;
         display: flex;
-        /* Ensure it's a flex container */
         justify-content: center;
-        /* Center profile icon on mobile */
     }
 
     .title-icon {
@@ -504,64 +448,24 @@ select {
         padding: 30px 15px;
     }
 
-    .dashboard-title {
-        font-size: 2rem;
-        margin-bottom: 30px;
-    }
-
-    /* This title is not on this page */
     .animated-logo {
         max-width: 250px;
         opacity: 0.15;
     }
 
-    .cards-container {
-        /* This section is not on this page */
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-
-    .card {
-        padding: 20px;
-    }
-
-    .card-icon {
-        font-size: 2rem;
-    }
-
-    .card h3 {
-        font-size: 1.2rem;
-    }
-
-    .action-btn,
-    .card-action-btn {
-        padding: 12px 20px;
-        font-size: 1rem;
-        width: 80%;
-        max-width: none;
-    }
-
     /* Form specific responsive adjustments */
     .form-container {
         padding: 25px 15px;
-        /* Less padding on very small screens */
         max-width: 95%;
     }
 
-    input[type="text"],
-    input[type="email"],
-    input[type="number"],
-    input[type="date"],
-    select {
+    input[type="number"] {
         padding: 0.8rem;
-        /* Slightly less padding for inputs */
-        margin-bottom: 1rem;
-        /* Less margin between inputs */
+        font-size: 1rem;
     }
 
     .submit-btn {
         padding: 0.875rem;
-        /* Less padding in button */
         font-size: 0.95rem;
     }
 }

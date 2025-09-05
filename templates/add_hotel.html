@@ -4,66 +4,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add New Hotel</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/add_hotel.css') }}"> <!-- Corrected CSS filename -->
+    <title>SafeServe Add New Hotel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/add_hotel.css') }}">
+    <!-- Linking to the main dashboard CSS -->
     <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <header>
-        <div class="header-content">
+    <header class="main-header">
+        <div class="header-left-content"> <!-- Contains logo and title -->
             <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Icon" class="title-icon">
             <h2>SafeServe</h2>
         </div>
-        <p class="moto-text">Your trusted partner for Safe and Quality Dining Experiences</p>
-
+        <div class="header-center-content"> <!-- Contains subtitle -->
+            <p class="moto-text">Your trusted partner for Safe and Quality Dining Experiences</p>
+        </div>
     </header>
 
-    <div class="content-wrapper"> <!-- New wrapper for content below header -->
-        <h2>Add New Hotel</h2>
-        <div class="container">
-            <form id="add-hotel-form">
-                <div class="form-group">
-                    <label for="name">Hotel Name</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="address">Address</label>
-                    <input type="text" id="address" name="address" required>
-                </div>
-                <div class="form-group">
-                    <label for="contact_number">Contact Number</label>
-                    <input type="text" id="contact_number" name="contact_number" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="license_number">License Number</label>
-                    <input type="text" id="license_number" name="license_number" required>
-                </div>
-                <div class="form-group">
-                    <label for="rating">Rating</label>
-                    <input type="number" id="rating" name="rating" min="0" max="5" required>
-                </div>
-                <div class="form-group">
-                    <label for="last_inspection_date">Last Inspection Date</label>
-                    <input type="date" id="last_inspection_date" name="last_inspection_date" required>
-                </div>
-                <div class="form-group">
-                    <label for="status">Status</label>
-                    <select id="status" name="status" required>
-                        <option value="Active">Active</option>
-                        <option value="Closed">Closed</option>
-                        <option value="Suspended">Suspended</option>
-                    </select>
-                </div>
-                <button type="submit" class="submit-btn">Add Hotel</button>
-            </form>
+    <main class="main-content-area">
+        <div class="animated-background">
+            <img src="{{ url_for('static', filename='images/icon.png') }}" alt="SafeServe Logo" class="animated-logo">
         </div>
-    </div>
+
+        <div class="content-wrapper">
+            <div class="page-header-content"> <!-- Custom wrapper for page title and back link -->
+                <h2>Add New Hotel</h2>
+                <a href="/inspector_dashboard" class="back-link">&larr; Back to Dashboard</a>
+            </div>
+
+            <div class="form-container"> <!-- New container for the form -->
+                <form id="add-hotel-form">
+                    <div class="form-group">
+                        <label for="name">Hotel Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" id="address" name="address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact_number">Contact Number</label>
+                        <input type="text" id="contact_number" name="contact_number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="license_number">License Number</label>
+                        <input type="text" id="license_number" name="license_number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="rating">Rating</label>
+                        <input type="number" id="rating" name="rating" min="0" max="5" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="last_inspection_date">Last Inspection Date</label>
+                        <input type="date" id="last_inspection_date" name="last_inspection_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select id="status" name="status" required>
+                            <option value="Active">Active</option>
+                            <option value="Closed">Closed</option>
+                            <option value="Suspended">Suspended</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="submit-btn">Add Hotel</button>
+                </form>
+            </div>
+        </div>
+    </main>
 
     <script>
         // Handle the form submission to add a new hotel
