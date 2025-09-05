@@ -1,0 +1,168 @@
+/* General Styling */
+:root {
+    --primary-color: #e74c3c;
+    --secondary-color: #333;
+    --background-light: #f4f7f6;
+    --card-background: #ffffff;
+    --text-color-dark: #333;
+    --text-color-light: #ecf0f1;
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-light);
+    color: var(--text-color-dark);
+    min-height: 100vh;
+}
+
+/* Header Section */
+.header {
+    background-color: #fff;
+    padding: 1.5rem 2rem;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.title-icon {
+    width: 50px;
+    height: 50px;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+}
+
+.moto-text {
+    color: #333;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+}
+
+/* Navigation Bar */
+.navigation {
+    background-color: #333
+        /* Dark background */
+}
+
+.navigation ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 0.75rem;
+}
+
+.navigation a {
+    color: var(--text-color-light);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.navigation a:hover {
+    background-color: #495057;
+    /* Slightly lighter on hover */
+}
+
+/* Main Content Area */
+.main-content {
+    padding: 3rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.main-content h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--secondary-color);
+    margin-bottom: 2rem;
+}
+
+/* This container holds the report cards */
+#reports-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+/* Report Card Styling */
+.report-card {
+    background: var(--card-background);
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+}
+
+.report-card h3 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.75rem;
+}
+
+.report-card p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 0.75rem;
+}
+
+.report-card strong {
+    color: var(--text-color-dark);
+    font-weight: 600;
+}
+
+.status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #fff;
+    display: inline-block;
+}
+
+/* Color coding for status */
+.status.pending {
+    background-color: #f39c12;
+}
+
+.status.in-progress {
+    background-color: #3498db;
+}
+
+.status.resolved {
+    background-color: #2ecc71;
+}
+
+.back-link {
+    display: block;
+    text-align: center;
+    margin-top: 2.5rem;
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.back-link:hover {
+    color: var(--primary-color);
+}
