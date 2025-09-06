@@ -1,29 +1,20 @@
+# --- START: MODIFICATIONS FOR DEPLOYMENT ---
 from flask import Flask, request, jsonify, render_template
-import mysql.connector
+import psycopg2 # MODIFIED: Switched from mysql.connector to psycopg2
+import psycopg2.extras # ADDED: Needed for dictionary-like cursor results
 import bcrypt
 from flask_cors import CORS
-import os # <-- 1. ADD THIS IMPORT
+import os # ADDED: Required for environment variables
+# --- END: MODIFICATIONS FOR DEPLOYMENT ---
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
 # --- START: MODIFIED DATABASE CONNECTION FOR DEPLOYMENT ---
-# This code will now use the production database URL from Render,
-# but will fall back to your local database if the environment variables are not found.
-db_host = os.environ.get('DB_HOST', 'localhost')
-db_user = os.environ.get('DB_USER', 'root')
-db_password = os.environ.get('DB_PASSWORD', 'Root12345')
-db_name = os.environ.get('DB_NAME', 'food_security_db')
-
-db = mysql.connector.connect(
-    host=db_host,
-    port=3306,
-    user=db_user,
-    password=db_password,
-    database=db_name
-)
+# This code now connects to your PostgreSQL database on Render using its DATABASE_URL.
+DATABASE_URL = os.environ.get('DATABASE_URL')
+db = psycopg2.connect(DATABASE_URL)
 # --- END: MODIFIED DATABASE CONNECTION ---
-
 
 inspector_credentials = [
     {'username': 'inspector1', 'password': 'ipass1', 'id': 1},
@@ -31,11 +22,10 @@ inspector_credentials = [
     {'username': 'inspector3', 'password': 'ipass3', 'id': 3}
 ]
 
+# --- Page Rendering Routes (No Changes Needed Here) ---
 @app.route('/')
 def index():
     return render_template('mainsignup_page.html')
-
-# --- Page Rendering Routes ---
 
 @app.route('/customer_login_page')
 def customer_login_page():
@@ -52,7 +42,6 @@ def hotel_login_page():
 @app.route('/hotel_dashboard')
 def hotel_dashboard():
     return render_template('hotel_dashboard.html')
-
 
 @app.route('/inspector_login_page')
 def inspector_login_page():
@@ -85,7 +74,7 @@ def hotel_signup_page():
 @app.route('/update_case/<int:case_id>')
 def update_case_page(case_id):
     try:
-        cursor = db.cursor(dictionary=True)
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         query = "SELECT * FROM food_poisoning_cases WHERE case_id = %s"
         cursor.execute(query, (case_id,))
         case = cursor.fetchone()
@@ -101,6 +90,10 @@ def update_case_page(case_id):
 def my_reports_page():
     return render_template('my_reports.html')
 
+@app.route('/inspections_page')
+def inspections_page():
+    return render_template('inspections.html')
+
 # --- API Routes ---
 
 @app.route('/customer_login', methods=['POST'])
@@ -109,7 +102,7 @@ def customer_login():
     username = data.get('username')
     password = data.get('password')
 
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     query = "SELECT * FROM customers WHERE username = %s"
     cursor.execute(query, (username,))
     customer = cursor.fetchone()
@@ -157,7 +150,7 @@ def hotel_login():
     username = data.get('username')
     password = data.get('password')
 
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     query = "SELECT * FROM hotel_managers WHERE username = %s"
     cursor.execute(query, (username,))
     manager = cursor.fetchone()
@@ -263,7 +256,7 @@ def get_hotel_feedback():
         return jsonify({'message': 'Hotel ID is required'}), 400
     
     try:
-        cursor = db.cursor(dictionary=True)
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         query = "SELECT * FROM customer_feedback WHERE hotel_id = %s ORDER BY feedback_date DESC"
         cursor.execute(query, (hotel_id,))
         feedback = cursor.fetchall()
@@ -308,7 +301,7 @@ def view_food_poisoning_cases_page():
 @app.route('/api/food_poisoning_cases', methods=['GET'])
 def get_food_poisoning_cases():
     try:
-        cursor = db.cursor(dictionary=True)
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         query = "SELECT * FROM food_poisoning_cases ORDER BY report_date DESC"
         cursor.execute(query)
         cases = cursor.fetchall()
@@ -384,10 +377,6 @@ def inspections_summary():
         print(f"Database error in inspections_summary: {str(e)}")
         return jsonify({"error": "Database error"}), 500
 
-@app.route('/inspections_page')
-def inspections_page():
-    return render_template('inspections.html')
-
 @app.route('/api/hotel_inspections')
 def get_hotel_inspections():
     hotel_id = request.args.get('hotel_id')
@@ -395,7 +384,7 @@ def get_hotel_inspections():
         return jsonify({"error": "Hotel ID is required"}), 400
 
     try:
-        cursor = db.cursor(dictionary=True)
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         query = "SELECT * FROM inspections WHERE hotel_id = %s ORDER BY inspection_date DESC"
         cursor.execute(query, (hotel_id,))
         inspections = cursor.fetchall()
@@ -431,7 +420,7 @@ def get_my_reports():
         return jsonify({'message': 'Customer ID is required'}), 400
     
     try:
-        cursor = db.cursor(dictionary=True)
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         query = "SELECT * FROM food_poisoning_cases WHERE customer_id = %s ORDER BY report_date DESC"
         cursor.execute(query, (customer_id,))
         reports = cursor.fetchall()
@@ -440,7 +429,6 @@ def get_my_reports():
     except Exception as e:
         return jsonify({'message': f'Database error: {str(e)}'}), 500
 
-# --- 2. REMOVE THIS BLOCK ---
-# if __name__ == '__main__':
-#     app.run(debug=True)
+# --- REMOVED THE if __name__ == '__main__': BLOCK ---
+# Gunicorn will handle running the app in production.
 
