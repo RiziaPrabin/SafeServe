@@ -1,20 +1,19 @@
-# --- START: MODIFICATIONS FOR DEPLOYMENT ---
 from flask import Flask, request, jsonify, render_template
-import psycopg2 # MODIFIED: Switched from mysql.connector to psycopg2
-import psycopg2.extras # ADDED: Needed for dictionary-like cursor results
+import mysql.connector
 import bcrypt
 from flask_cors import CORS
-import os # ADDED: Required for environment variables
-# --- END: MODIFICATIONS FOR DEPLOYMENT ---
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
-# --- START: MODIFIED DATABASE CONNECTION FOR DEPLOYMENT ---
-# This code now connects to your PostgreSQL database on Render using its DATABASE_URL.
-DATABASE_URL = os.environ.get('DATABASE_URL')
-db = psycopg2.connect(DATABASE_URL)
-# --- END: MODIFIED DATABASE CONNECTION ---
+# --- Database Connection ---
+db = mysql.connector.connect(
+    host="localhost",
+    port=3306,
+    user="root",
+    password="Root12345",
+    database="food_security_db"
+)
 
 inspector_credentials = [
     {'username': 'inspector1', 'password': 'ipass1', 'id': 1},
@@ -22,10 +21,12 @@ inspector_credentials = [
     {'username': 'inspector3', 'password': 'ipass3', 'id': 3}
 ]
 
-# --- Page Rendering Routes (No Changes Needed Here) ---
 @app.route('/')
 def index():
+    # This renders the mainsignup_page.html file from your 'templates' folder.
     return render_template('mainsignup_page.html')
+
+# --- Page Rendering Routes ---
 
 @app.route('/customer_login_page')
 def customer_login_page():
@@ -43,38 +44,48 @@ def hotel_login_page():
 def hotel_dashboard():
     return render_template('hotel_dashboard.html')
 
+
 @app.route('/inspector_login_page')
 def inspector_login_page():
     return render_template('inspector_login.html')
 
 @app.route('/inspector_dashboard')
 def inspector_dashboard():
+    # This route will find and display your 'dashbo.html' file.
     return render_template('inspector_dashboard.html')
 
 @app.route('/add_hotel')
 def add_hotel_page():
+    # This route will find and display your 'add_hotel.html' file.
     return render_template('add_hotel.html')
+# Add these new page rendering routes to your app.py
 
 @app.route('/submit_feedback_page')
 def submit_feedback_page():
+    # Make sure you have a file named 'submit_feedback.html' in your templates folder
     return render_template('submit_feedback.html')
 
 @app.route('/report_food_poisoning_page')
 def report_food_poisoning_page():
+    # Make sure you have a file named 'report_food_poisoning.html' in your templates folder
     return render_template('report_food_poisoning.html')
-
+# --- ADD THIS NEW ROUTE ---
 @app.route('/customer_signup')
 def customer_signup_page():
+    # This tells Flask what to do when the user clicks the "Sign Up" link
     return render_template('customer_signup.html')
-
+# -------------------------
 @app.route('/hotelman_signup')
 def hotel_signup_page():
+    # This tells Flask what to do when the user clicks the "Sign Up" link
     return render_template('hotel_signup.html')
+# -------------------------
 
+# Renders the inspector's form to update a case.
 @app.route('/update_case/<int:case_id>')
 def update_case_page(case_id):
     try:
-        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cursor = db.cursor(dictionary=True)
         query = "SELECT * FROM food_poisoning_cases WHERE case_id = %s"
         cursor.execute(query, (case_id,))
         case = cursor.fetchone()
@@ -86,13 +97,13 @@ def update_case_page(case_id):
     except Exception as e:
         return f"Database error: {str(e)}", 500
 
+# Renders the customer's page to view their own reports.
 @app.route('/my_reports_page')
 def my_reports_page():
     return render_template('my_reports.html')
 
-@app.route('/inspections_page')
-def inspections_page():
-    return render_template('inspections.html')
+# --- END: New Page Rendering Routes ---
+
 
 # --- API Routes ---
 
@@ -102,16 +113,19 @@ def customer_login():
     username = data.get('username')
     password = data.get('password')
 
-    cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cursor = db.cursor(dictionary=True)
     query = "SELECT * FROM customers WHERE username = %s"
     cursor.execute(query, (username,))
     customer = cursor.fetchone()
     cursor.close()
 
     if customer and bcrypt.checkpw(password.encode('utf-8'), customer['password'].encode('utf-8')):
+        # MODIFIED: Now returns the customer's ID on successful login
         return jsonify({'message': 'Login successful!', 'customer_id': customer['id']}), 200
     else:
         return jsonify({'message': 'Invalid credentials!'}), 401
+
+
 
 @app.route('/inspector_login', methods=['POST'])
 def inspector_login():
@@ -121,9 +135,13 @@ def inspector_login():
 
     for creds in inspector_credentials:
         if creds['username'] == username and creds['password'] == password:
+            # MODIFIED: Now returns the inspector's ID on successful login
             return jsonify({'message': 'Login successful!', 'inspector_id': creds['id']}), 200
     
     return jsonify({'message': 'Invalid credentials!'}), 401
+
+
+# --- Hotel Manager API Routes ---
 
 @app.route('/register_hotel_manager', methods=['POST'])
 def register_hotel_manager():
@@ -150,7 +168,7 @@ def hotel_login():
     username = data.get('username')
     password = data.get('password')
 
-    cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cursor = db.cursor(dictionary=True)
     query = "SELECT * FROM hotel_managers WHERE username = %s"
     cursor.execute(query, (username,))
     manager = cursor.fetchone()
@@ -161,12 +179,15 @@ def hotel_login():
     else:
         return jsonify({'message': 'Invalid credentials!'}), 401
 
+
 @app.route('/hotels', methods=['GET', 'POST'])
 def manage_hotels():
+    # This block handles ADDING a new hotel
     if request.method == 'POST':
         try:
             data = request.json
             
+            # Extract data from the received JSON
             name = data.get('name')
             address = data.get('address')
             contact_number = data.get('contact_number')
@@ -176,6 +197,7 @@ def manage_hotels():
             last_inspection_date = data.get('last_inspection_date')
             status = data.get('status')
 
+            # Insert into the database
             cursor = db.cursor()
             query = """
                 INSERT INTO hotels (name, address, contact_number, email, license_number, rating, last_inspection_date, status) 
@@ -192,7 +214,9 @@ def manage_hotels():
         except Exception as e:
             db.rollback()
             return jsonify({'message': f'Database error: {str(e)}'}), 500
-    else:
+
+    # This block handles LISTING all hotels
+    else: # This is a GET request
         try:
             cursor = db.cursor()
             query = "SELECT * FROM hotels WHERE status = 'Active'"
@@ -202,6 +226,8 @@ def manage_hotels():
             return jsonify(hotels)
         except Exception as e:
             return jsonify({"error": str(e)}), 500
+
+# --- Customer (Public User) API Routes ---
 
 @app.route('/register_customer', methods=['POST'])
 def register_customer():
@@ -221,10 +247,14 @@ def register_customer():
     
     return jsonify({'message': 'Customer registered successfully!'}), 201
 
+# --- START: Add these three new routes to your app.py file ---
+
+# Route 1: Handles the form submission from the customer's 'submit_feedback.html' page.
 @app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
     try:
         data = request.json
+        # These default values are used for fields the customer doesn't fill out
         action_taken = data.get('action_taken', 'Pending Review')
         status = data.get('status', 'New')
 
@@ -245,18 +275,24 @@ def submit_feedback():
         db.rollback()
         return jsonify({'message': f'Database error: {str(e)}'}), 500
 
+# Route 2: Renders the HTML page for the hotel owner to view their feedback.
+# This is the destination for a link or button on the hotel owner's dashboard.
 @app.route('/feedback_page')
 def feedback_page():
     return render_template('hotel_feedback.html')
 
+# Route 3: The API endpoint that fetches feedback for a SPECIFIC hotel.
+# This is called by the JavaScript on the 'hotel_feedback.html' page.
 @app.route('/api/hotel_feedback', methods=['GET'])
 def get_hotel_feedback():
+    # Gets the hotel_id from the URL (e.g., /api/hotel_feedback?hotel_id=123)
     hotel_id = request.args.get('hotel_id')
     if not hotel_id:
         return jsonify({'message': 'Hotel ID is required'}), 400
     
     try:
-        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cursor = db.cursor(dictionary=True) # dictionary=True is essential for JSON
+        # Selects only the feedback for the specified hotel_id
         query = "SELECT * FROM customer_feedback WHERE hotel_id = %s ORDER BY feedback_date DESC"
         cursor.execute(query, (hotel_id,))
         feedback = cursor.fetchall()
@@ -265,10 +301,14 @@ def get_hotel_feedback():
     except Exception as e:
         return jsonify({'message': f'Database error: {str(e)}'}), 500
 
+# --- END: New routes ---
+
+# Route 1: Handles the POST request from the customer's report form
 @app.route('/food_poisoning_cases', methods=['POST'])
 def add_food_poisoning_case():
     try:
         data = request.json
+        # MODIFIED: This now gets the customer_id from the form data
         customer_id = data.get('customer_id') 
 
         query = """
@@ -282,7 +322,7 @@ def add_food_poisoning_case():
             data.get('number_of_people_affected'),
             'Pending', 
             '',
-            customer_id
+            customer_id # Added customer_id to the insert
         )
         cursor = db.cursor()
         cursor.execute(query, values)
@@ -294,14 +334,16 @@ def add_food_poisoning_case():
         print(f"Database error: {str(e)}")
         return jsonify({'message': 'An error occurred while submitting the report.'}), 500
 
+# Route 2: Renders the page for the inspector to view all cases
 @app.route('/view_food_poisoning_cases')
 def view_food_poisoning_cases_page():
     return render_template('view_food_poisoning_cases.html')
 
+# Route 3: The API endpoint that provides the data for the inspector's table
 @app.route('/api/food_poisoning_cases', methods=['GET'])
 def get_food_poisoning_cases():
     try:
-        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cursor = db.cursor(dictionary=True)
         query = "SELECT * FROM food_poisoning_cases ORDER BY report_date DESC"
         cursor.execute(query)
         cases = cursor.fetchall()
@@ -311,14 +353,22 @@ def get_food_poisoning_cases():
         print(f"Database error: {str(e)}")
         return jsonify({'message': 'An error occurred while fetching the cases.'}), 500
 
+# --- END: New routes ---
+
+# --- START: New routes for the inspection workflow ---
+
+# This route displays the page where the inspector enters the Hotel ID
 @app.route('/start_inspection_page')
 def start_inspection_page():
     return render_template('start_inspection.html')
 
+# This route takes the Hotel ID from the URL and displays the main inspection form
 @app.route('/inspection_form/<int:hotel_id>')
 def inspection_form(hotel_id):
+    # The hotel_id is passed to the template so it can be displayed and used in the form
     return render_template('inspection_form.html', hotel_id=hotel_id)
 
+# This is the API endpoint that saves the inspection data to the database
 @app.route('/api/inspections', methods=['POST'])
 def add_inspection():
     try:
@@ -345,9 +395,15 @@ def add_inspection():
 
     except Exception as e:
         db.rollback()
+        # It's good practice to log the error for debugging
         print(f"Database error: {str(e)}")
         return jsonify({'message': 'An error occurred while submitting the inspection.'}), 500
 
+# --- END: New inspection routes ---
+
+# --- START: New routes for Hotel Owner Inspection View ---
+
+# This is the API endpoint that calculates the summary for the dashboard card.
 @app.route('/api/inspections_summary')
 def inspections_summary():
     hotel_id = request.args.get('hotel_id')
@@ -357,10 +413,12 @@ def inspections_summary():
     try:
         cursor = db.cursor()
         
+        # Query to count passed inspections
         query_passed = "SELECT COUNT(*) FROM inspections WHERE hotel_id = %s AND overall_result = 'Passed'"
         cursor.execute(query_passed, (hotel_id,))
         passed_count = cursor.fetchone()[0]
 
+        # Query to count failed or needs improvement inspections
         query_failed = "SELECT COUNT(*) FROM inspections WHERE hotel_id = %s AND overall_result IN ('Failed', 'Needs Improvement')"
         cursor.execute(query_failed, (hotel_id,))
         failed_count = cursor.fetchone()[0]
@@ -377,6 +435,12 @@ def inspections_summary():
         print(f"Database error in inspections_summary: {str(e)}")
         return jsonify({"error": "Database error"}), 500
 
+# This route renders the page where the hotel owner can see their full inspection history.
+@app.route('/inspections_page')
+def inspections_page():
+    return render_template('inspections.html')
+
+# This is the API endpoint that gets the detailed list of inspections for the history page.
 @app.route('/api/hotel_inspections')
 def get_hotel_inspections():
     hotel_id = request.args.get('hotel_id')
@@ -384,7 +448,7 @@ def get_hotel_inspections():
         return jsonify({"error": "Hotel ID is required"}), 400
 
     try:
-        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cursor = db.cursor(dictionary=True)
         query = "SELECT * FROM inspections WHERE hotel_id = %s ORDER BY inspection_date DESC"
         cursor.execute(query, (hotel_id,))
         inspections = cursor.fetchall()
@@ -395,6 +459,7 @@ def get_hotel_inspections():
         print(f"Database error in get_hotel_inspections: {str(e)}")
         return jsonify({"error": "Database error"}), 500
 
+# Handles the inspector's update submission
 @app.route('/api/update_case/<int:case_id>', methods=['POST'])
 def update_case(case_id):
     try:
@@ -413,6 +478,7 @@ def update_case(case_id):
         db.rollback()
         return jsonify({'message': f'Database error: {str(e)}'}), 500
 
+# Fetches the reports submitted by a specific customer
 @app.route('/api/my_reports', methods=['GET'])
 def get_my_reports():
     customer_id = request.args.get('customer_id')
@@ -420,7 +486,7 @@ def get_my_reports():
         return jsonify({'message': 'Customer ID is required'}), 400
     
     try:
-        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cursor = db.cursor(dictionary=True)
         query = "SELECT * FROM food_poisoning_cases WHERE customer_id = %s ORDER BY report_date DESC"
         cursor.execute(query, (customer_id,))
         reports = cursor.fetchall()
@@ -428,7 +494,10 @@ def get_my_reports():
         return jsonify(reports)
     except Exception as e:
         return jsonify({'message': f'Database error: {str(e)}'}), 500
+# --- END: New routes ---
 
-# --- REMOVED THE if __name__ == '__main__': BLOCK ---
-# Gunicorn will handle running the app in production.
 
+
+# --- This should be at the very end of the file ---
+if __name__ == '__main__':
+    app.run(debug=True)
